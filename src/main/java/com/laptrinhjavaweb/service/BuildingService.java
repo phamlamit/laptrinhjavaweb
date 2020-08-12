@@ -7,6 +7,5 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 
 public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
-	Boolean createBuilding(BuildingDTO buildingDTO);
-	Boolean createRentArea(BuildingDTO buildingDTO);
+	BuildingDTO save(BuildingDTO buildingDTO);
 }

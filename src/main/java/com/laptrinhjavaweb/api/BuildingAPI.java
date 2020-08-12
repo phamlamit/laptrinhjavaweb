@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.api;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,14 +24,9 @@ public class BuildingAPI {
 	
 	//Create
 	@PostMapping("/get-buildings")
-	public String getBuildings(@RequestBody BuildingDTO buildingDTO){
-		if(!buildingService.createBuilding(buildingDTO)) {
-			return "Some time is wrong in createBuilding";
-		}
-		if(!buildingService.createRentArea(buildingDTO)) {
-			return "Some time is wrong in add createRentArea";
-		}
-		return "Create Done";
+	public BuildingDTO createBuildings(@RequestBody BuildingDTO buildingDTO){
+		BuildingDTO newbuilding = buildingService.save(buildingDTO); 
+		return newbuilding;
 	}
 	
 	//Search nhung chua tao buildingInput
@@ -41,11 +37,11 @@ public class BuildingAPI {
 	 * return null; }
 	 */
 
-//	@GetMapping("/buildings")
-//	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,@RequestParam("types") List<String> types) {
-//		BuildingSearchBuilder builder = convertMapToBuilder(requestParams);
-//		return buildingService.getBuildings(builder);
-//	}
+	@GetMapping("/buildings")
+	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,@RequestParam("types") List<String> types) {
+		BuildingSearchBuilder builder = convertMapToBuilder(requestParams);
+		return buildingService.getBuildings(builder);
+	}
 
 	private BuildingSearchBuilder convertMapToBuilder(Map<String, String> requestParams) {
 		Integer numberOfBasement = requestParams.containsKey("numberOfBasement")
