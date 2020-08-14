@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
 
 public class BuildingRepositoryImpl implements BuildingRepository {
@@ -26,22 +27,18 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
-			// STEP 2: Register JDBC driver
 
 			Class.forName(JDBC_DRIVER);
-			// STEP 3: Open a connection
+
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			// STEP 4: Execute a query
+
 			stmt = conn.createStatement();
 
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT * FROM building b where 1=1");
-//			if(buildingSearchBuilder.getName() != null) {
-//				sql.append(" b.name like '%"+buildingSearchBuilder.getName()+"%'" );
-//			}
+
 			sql = buildSqlBuildingSearch(buildingSearchBuilder, sql);
 			ResultSet rs = stmt.executeQuery(sql.toString());
-			// STEP 5: Extract data from result set
 			while (rs.next()) {
 				BuildingDTO buildingDTO = new BuildingDTO();
 				Long id = rs.getLong("id");
@@ -54,33 +51,28 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 			rs.close();
 		} catch (SQLException se) {
-			// Handle errors for JDBC
+
 			se.printStackTrace();
 		} catch (Exception e) {
-			// Handle errors for Class.forName
+
 			e.printStackTrace();
 		} finally {
-			// finally block used to close resources
+
 			try {
 				if (stmt != null)
 					conn.close();
-			} catch (SQLException se) {
-			} // do nothing
-			try {
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
+
 				se.printStackTrace();
-			} // end finally try
-		} // end try
+			}
+		}
 
 		return result;
 	}
 
 	private StringBuffer buildSqlBuildingSearch(BuildingSearchBuilder buildingSearchBuilder, StringBuffer sql) {
-//		if(buildingSearchBuilder.getName() != null) {
-//			sql.append(" b.name like '%"+buildingSearchBuilder.getName()+"%'" );
-//		}
 		try {
 			Field[] fields = BuildingSearchBuilder.class.getDeclaredFields();
 			for (Field field : fields) {
@@ -114,63 +106,23 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	}
 
 	@Override
-	public Boolean createBuilding(BuildingDTO buildingDTO) {
-		int result = 0;
+	public Long save(BuildingDTO buildingDTO) {
 		Connection conn = null;
 		PreparedStatement rs = null;
+		ResultSet result = null;
 		try {
 			Class.forName(JDBC_DRIVER);
-			// STEP 3: Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			// STEP 4: Execute a query
-//			String sql = "Insert INTO building "
-//					+ "(name,street,district,structure,numberOfBasement,floorArea,direction,"
-//					+ "level,rentPrice,rentPriceDescription,serviceFee,carFee,motoFee,overtimeFee,waterFee,"
-//					+ "electricityFee,deposit,payment,rentTime,decorationTime,brokerageFee,types,note,"
-//					+ "linkOfBuilding) " + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
 			StringBuffer sql = new StringBuffer();
 			sql.append("Insert INTO building (");
 			sql = buildSqlCreateBuildingDTO(buildingDTO, sql);
-			rs = conn.prepareStatement(sql.toString());
+			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
 			setValue(buildingDTO, rs);
-
-			// rs = conn.prepareStatement(sql);
-//			rs.setString(1, buildingDTO.getName());
-//			rs.setString(2, buildingDTO.getStreet());
-//			rs.setString(3, buildingDTO.getDistrict());
-//			rs.setString(4, buildingDTO.getStructure());
-//			rs.setInt(5, buildingDTO.getNumberOfBasement());
-//			rs.setInt(6, buildingDTO.getFloorArea());
-//			rs.setString(7, buildingDTO.getDirection());
-//			rs.setString(8, buildingDTO.getLevel());
-//			rs.setLong(9, buildingDTO.getRentPrice());
-//			rs.setString(10, buildingDTO.getRentPriceDescription());
-//			rs.setString(11, buildingDTO.getServiceFee());
-//			rs.setString(12, buildingDTO.getCarFee());
-//			rs.setString(13, buildingDTO.getMotoFee());
-//			rs.setString(14, buildingDTO.getOvertimeFee());
-//			rs.setString(15, buildingDTO.getWaterFee());
-//			rs.setString(16, buildingDTO.getElectricityFee());
-//			rs.setString(17, buildingDTO.getDeposit());
-//			rs.setString(18, buildingDTO.getPayment());
-//			rs.setString(19, buildingDTO.getRentTime());
-//			rs.setDouble(20, (Double) buildingDTO.getDecorationTime());
-//			rs.setDouble(21, (Double) buildingDTO.getBrokerageFee());
-//			String types = "";
-//			String[] type = buildingDTO.getTypes();
-//			for (int i = 0; i < type.length; i++) {
-//				if (i == type.length - 1) {
-//					types += type[i];
-//				} else {
-//					types += type[i] + ",";
-//				}
-//			}
-//			rs.setString(22, types);
-//			rs.setString(23, buildingDTO.getNote());
-//			rs.setString(24, buildingDTO.getLinkOfBuilding());
-			result = rs.executeUpdate();
-
+			rs.executeUpdate();
+			result = rs.getGeneratedKeys();
+			if (result.next()) {
+				return result.getLong(1);
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -178,66 +130,22 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			// finally block used to close resources
+
 			try {
+				if (result != null) {
+					result.close();
+				}
 				if (rs != null)
 					conn.close();
-			} catch (SQLException se) {
-			} // do nothing
-			try {
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
+
 				se.printStackTrace();
-			} // end finally try
-		} // end try
-
-		return result == 1;
-	}
-
-	@Override
-	public Boolean createRentArea(BuildingDTO buildingDTO) {
-
-		int result = 0;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			// STEP 4: Execute a query
-			String sql = "INSERT INTO rentarea (value,buildingid) VALUES (?,(SELECT id FROM building  WHERE 1 =1 ORDER BY id desc limit 1))";
-			String rentArea = buildingDTO.getRentArea();
-			String[] valueRentArea = rentArea.split("\\,");
-
-			for (String value : valueRentArea) {
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, Integer.parseInt(value));
-				result = stmt.executeUpdate();
 			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// STEP 3: Open a connection
-		catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					conn.close();
-			} catch (SQLException se) {
-			} // do nothing
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
 		} // end try
+		return null;
 
-		return result == 1;
 	}
 
 	private void setValue(BuildingDTO buildingDTO, PreparedStatement rs) {
@@ -301,7 +209,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				field.setAccessible(true);
 				try {
 					if (field.get(buildingDTO) != null) {
-						sql.append(field.getName()+",");
+						sql.append(field.getName() + ",");
 						n++;
 					}
 				} catch (IllegalArgumentException e) {
@@ -321,6 +229,46 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		sql.append("?)");
 		return sql;
 
+	}
+
+	@Override
+	public BuildingDTO findById(Long buildingId) {
+		BuildingDTO buildingDTO = new BuildingDTO();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			String sql = "Select * FROM building WHERE id = ?";
+			stmt=conn.prepareStatement(sql);
+			stmt.setLong(1, buildingId);
+			rs=stmt.executeQuery();
+			while(rs.next()) {
+				
+				Long id = rs.getLong("id");
+				String name = rs.getString("name");
+				String ward = rs.getString("ward");
+				String street = rs.getString("street");
+				String district = rs.getString("district");
+				String structure = rs.getString("structure");
+				buildingDTO.setId(id);
+				buildingDTO.setName(name);
+				buildingDTO.setWard(ward);
+				buildingDTO.setStreet(street);
+				buildingDTO.setDistrict(district);
+				buildingDTO.setStructure(structure);
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return buildingDTO;
 	}
 
 }
