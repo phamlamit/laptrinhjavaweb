@@ -4,12 +4,13 @@ import java.util.Date;
 
 public class RentAreaDTO {
 	private Long id;
-	public Long buildingId;
-	public Integer value;
+	private Long buildingId;
+	private Integer value;
 	private Date createdDate;
 	private Date modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
+	
 	public Long getId() {
 		return id;
 	}

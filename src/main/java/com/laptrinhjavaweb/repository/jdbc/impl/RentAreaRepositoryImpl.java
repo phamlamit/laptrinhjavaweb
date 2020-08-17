@@ -3,7 +3,9 @@ package com.laptrinhjavaweb.repository.jdbc.impl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.repository.jdbc.RentAreaRepository;
@@ -15,18 +17,23 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 	static final String PASS = "12345";
 
 	@Override
-	public void save(RentAreaDTO rentAreaDTO) {
+	public Long save(RentAreaDTO rentAreaDTO) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			// STEP 4: Execute a query
 			String sql = "INSERT INTO rentarea (value,buildingid) VALUES (?,?)";
-			stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, rentAreaDTO.getValue());
 			stmt.setLong(2, rentAreaDTO.getBuildingId());
-			int rs = stmt.executeUpdate();
+			stmt.executeUpdate();
+			rs = stmt.getGeneratedKeys();
+			if(rs.next()) {
+				return rs.getLong(1);
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,6 +45,9 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 		} finally {
 
 			try {
+				if(rs!=null) {
+					rs.close();
+				}
 				if (stmt != null)
 					conn.close();
 				if (conn != null)
@@ -46,6 +56,7 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 
 				se.printStackTrace();
 			}
+			return null;
 		}
 
 	}
