@@ -2,7 +2,6 @@ package com.laptrinhjavaweb.repository.jdbc.impl;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,10 +15,6 @@ import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
 
 public class BuildingRepositoryImpl implements BuildingRepository {
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/javaweb62020module1";
-	static final String USER = "root";
-	static final String PASS = "12345";
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -28,9 +23,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		Statement stmt = null;
 		try {
 
-			Class.forName(JDBC_DRIVER);
-
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = EntityManagerFactory.getInstance().getConnection();
 
 			stmt = conn.createStatement();
 
@@ -60,7 +53,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 			try {
 				if (stmt != null)
-					conn.close();
+					stmt.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
@@ -111,24 +104,34 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		PreparedStatement rs = null;
 		ResultSet result = null;
 		try {
-			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = EntityManagerFactory.getInstance().getConnection();
+			conn.setAutoCommit(false);
 			StringBuffer sql = new StringBuffer();
-			sql.append("Insert INTO building (");
-			sql = buildSqlCreateBuildingDTO(buildingDTO, sql);
+			sql.append("Insert INTO building ('name', 'street','district','numberOfBasement','floorArea') VALUES(?,?,?,?,?)");
+			
 			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-			setValue(buildingDTO, rs);
+			rs.setString(1, buildingDTO.getName());
+			rs.setString(2, buildingDTO.getStreet());
+			rs.setString(3, buildingDTO.getDistrict());
+			rs.setLong(4, buildingDTO.getNumberOfBasement());
+			rs.setLong(5, buildingDTO.getFloorArea());
+			//setValue(buildingDTO, rs);
 			rs.executeUpdate();
+			conn.commit();
 			result = rs.getGeneratedKeys();
 			if (result.next()) {
 				return result.getLong(1);
 			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(conn!=null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		} finally {
 
 			try {
@@ -136,7 +139,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					result.close();
 				}
 				if (rs != null)
-					conn.close();
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
@@ -148,88 +151,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	}
 
-	private void setValue(BuildingDTO buildingDTO, PreparedStatement rs) {
-		int n = 1;
-		Field[] fields = BuildingDTO.class.getDeclaredFields();
-		try {
-			for (Field field : fields) {
-				if (!field.getName().equals("id") && !field.getName().equals("types")
-						&& !field.getName().equals("rentArea")) {
-					String fieldType = field.getType().getName();
-					field.setAccessible(true);
-					if (fieldType.equals("java.lang.String")) {
-						if (field.get(buildingDTO) != null) {
-							rs.setString(n, field.get(buildingDTO).toString());
-							n++;
-						}
-					} else if (fieldType.equals("java.lang.Integer")) {
-						if (field.get(buildingDTO) != null) {
-							rs.setInt(n, (int) field.get(buildingDTO));
-							n++;
-						}
-					} else if (fieldType.equals("java.lang.Double")) {
-						if (field.get(buildingDTO) != null) {
-							rs.setDouble(n, (double) field.get(buildingDTO));
-							n++;
-						}
 
-					} else if (fieldType.equals("java.lang.Long")) {
-						if (field.get(buildingDTO) != null) {
-							rs.setLong(n, (long) field.get(buildingDTO));
-							n++;
-						}
 
-					}
-				}
-			}
-			String[] types = buildingDTO.getTypes();
-			String typesValue = "";
-			for (int i = 0; i < types.length; i++) {
-				if (i == types.length - 1) {
-					typesValue += types[i];
-				} else {
-					typesValue += types[i] + ",";
-				}
-			}
-			rs.setString(n, typesValue);
-
-		} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private StringBuffer buildSqlCreateBuildingDTO(BuildingDTO buildingDTO, StringBuffer sql) {
-		int n = 0;
-		Field[] fields = BuildingDTO.class.getDeclaredFields();
-		for (Field field : fields) {
-			if (!field.getName().equals("id") && !field.getName().equals("types")
-					&& !field.getName().equals("rentArea")) {
-				field.setAccessible(true);
-				try {
-					if (field.get(buildingDTO) != null) {
-						sql.append(field.getName() + ",");
-						n++;
-					}
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}
-		sql.append("types) values(");
-		for (int i = 0; i < n; i++) {
-			sql.append("?,");
-		}
-		sql.append("?)");
-		return sql;
-
-	}
 
 	@Override
 	public BuildingDTO findById(Long buildingId) {
@@ -239,14 +162,13 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		ResultSet rs = null;
 
 		try {
-			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = EntityManagerFactory.getInstance().getConnection();
 			String sql = "Select * FROM building WHERE id = ?";
-			stmt=conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql);
 			stmt.setLong(1, buildingId);
-			rs=stmt.executeQuery();
-			while(rs.next()) {
-				
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+
 				Long id = rs.getLong("id");
 				String name = rs.getString("name");
 				String ward = rs.getString("ward");
@@ -260,15 +182,96 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				buildingDTO.setDistrict(district);
 				buildingDTO.setStructure(structure);
 			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+			}
+			
 		}
 
 		return buildingDTO;
+	}
+
+	@Override
+	public Long saveWithTransaction(BuildingDTO buildingDTO) {
+		Long buildingId = null;
+		Connection conn = null;
+		PreparedStatement rs = null;
+		ResultSet result = null;
+		try {
+			conn = EntityManagerFactory.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			StringBuffer sql = new StringBuffer();
+			sql.append("Insert INTO building (name, street,district,numberOfBasement,floorArea) VALUES(?,?,?,?,?)");
+			
+			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
+			rs.setString(1, buildingDTO.getName());
+			rs.setString(2, buildingDTO.getStreet());
+			rs.setString(3, buildingDTO.getDistrict());
+			rs.setLong(4, buildingDTO.getNumberOfBasement());
+			rs.setLong(5, buildingDTO.getFloorArea());
+			rs.executeUpdate();
+			conn.commit();
+			result = rs.getGeneratedKeys();
+			
+			if (result.next()) {
+				buildingId=  result.getLong(1);
+			}
+			StringBuilder sqlSaveRentArea = new StringBuilder("INSERT INTO rentarea (value,buildingid) VALUES (?,?)");
+			rs = conn.prepareStatement(sqlSaveRentArea.toString());
+			
+			for (String value : buildingDTO.getRentAreas()) {
+				rs.setInt(1, Integer.parseInt(value));
+				rs.setLong(2, buildingId);
+				rs.executeUpdate();
+				conn.commit();
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			
+			if(conn!=null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		} finally {
+
+			try {
+				if (result != null) {
+					result.close();
+				}
+				if (rs != null)
+					rs.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+				
+			}
+			
+		} // end try
+		return buildingId;
+		
+
 	}
 
 }

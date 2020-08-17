@@ -35,6 +35,7 @@ public class BuildingDTO {
 	private Date modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
+	private String[] rentAreas = new String[] {};
 
 	public Long getId() {
 		return id;
@@ -290,6 +291,14 @@ public class BuildingDTO {
 
 	public void setRentArea(String rentArea) {
 		this.rentArea = rentArea;
+	}
+
+	public String[] getRentAreas() {
+		return rentAreas;
+	}
+
+	public void setRentAreas(String[] rentAreas) {
+		this.rentAreas = rentAreas;
 	}
 
 }

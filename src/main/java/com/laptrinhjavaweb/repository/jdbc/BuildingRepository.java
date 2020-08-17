@@ -10,5 +10,6 @@ public interface BuildingRepository {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
 	Long save(BuildingDTO buildingDTO);
 	BuildingDTO findById(Long buildingId);
+	Long saveWithTransaction(BuildingDTO buildingDTO);
 
 }

@@ -23,16 +23,13 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public BuildingDTO save(BuildingDTO buildingDTO) {
-		Long buildingId = buildingRepository.save(buildingDTO);
+		//open transasction
+		
 		String rentArea = buildingDTO.getRentArea();
 		String[] valueRentArea = rentArea.split(",");
 
-		for (String value : valueRentArea) {
-			RentAreaDTO rentAreaDTO = new RentAreaDTO();
-			rentAreaDTO.setBuildingId(buildingId);
-			rentAreaDTO.setValue(Integer.parseInt(value));
-			rentAreaRepository.save(rentAreaDTO);
-		}
+		buildingDTO.setRentAreas(valueRentArea);
+		Long buildingId = buildingRepository.saveWithTransaction(buildingDTO);
 		return buildingRepository.findById(buildingId);
 	}
 
