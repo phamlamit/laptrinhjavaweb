@@ -12,9 +12,11 @@ import java.util.List;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.RentAreaDTO;
+import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
+import com.laptrinhjavaweb.repository.jdbc.SimpleJpaRepository;
 
-public class BuildingRepositoryImpl implements BuildingRepository {
+public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEntity> implements BuildingRepository {
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -274,4 +276,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	}
 
+
+
+	
 }

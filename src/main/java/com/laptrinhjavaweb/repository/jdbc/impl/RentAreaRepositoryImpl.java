@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.laptrinhjavaweb.dto.RentAreaDTO;
+import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.jdbc.RentAreaRepository;
+import com.laptrinhjavaweb.repository.jdbc.SimpleJpaRepository;
 
-public class RentAreaRepositoryImpl implements RentAreaRepository {
+public class RentAreaRepositoryImpl extends SimpleJpaRepositoryImpl<RentAreaEntity> implements RentAreaRepository {
 
 	@Override
 	public Long save(RentAreaDTO rentAreaDTO) {
