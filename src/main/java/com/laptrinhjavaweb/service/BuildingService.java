@@ -8,4 +8,5 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
 	BuildingDTO save(BuildingDTO buildingDTO);
+	List<BuildingDTO> fillAll();
 }

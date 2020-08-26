@@ -100,58 +100,58 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
 
 	}
 
-	@Override
-	public Long save(BuildingDTO buildingDTO) {
-		Connection conn = null;
-		PreparedStatement rs = null;
-		ResultSet result = null;
-		try {
-			conn = EntityManagerFactory.getInstance().getConnection();
-			conn.setAutoCommit(false);
-			StringBuffer sql = new StringBuffer();
-			sql.append("Insert INTO building ('name', 'street','district','numberOfBasement','floorArea') VALUES(?,?,?,?,?)");
-			
-			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-			rs.setString(1, buildingDTO.getName());
-			rs.setString(2, buildingDTO.getStreet());
-			rs.setString(3, buildingDTO.getDistrict());
-			rs.setLong(4, buildingDTO.getNumberOfBasement());
-			rs.setLong(5, buildingDTO.getFloorArea());
-			//setValue(buildingDTO, rs);
-			rs.executeUpdate();
-			conn.commit();
-			result = rs.getGeneratedKeys();
-			if (result.next()) {
-				return result.getLong(1);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			if(conn!=null) {
-				try {
-					conn.rollback();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		} finally {
-
-			try {
-				if (result != null) {
-					result.close();
-				}
-				if (rs != null)
-					rs.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-
-				se.printStackTrace();
-			}
-		} // end try
-		return null;
-
-	}
+//	@Override
+//	public Long save(BuildingDTO buildingDTO) {
+//		Connection conn = null;
+//		PreparedStatement rs = null;
+//		ResultSet result = null;
+//		try {
+//			conn = EntityManagerFactory.getInstance().getConnection();
+//			conn.setAutoCommit(false);
+//			StringBuffer sql = new StringBuffer();
+//			sql.append("Insert INTO building ('name', 'street','district','numberOfBasement','floorArea') VALUES(?,?,?,?,?)");
+//			
+//			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
+//			rs.setString(1, buildingDTO.getName());
+//			rs.setString(2, buildingDTO.getStreet());
+//			rs.setString(3, buildingDTO.getDistrict());
+//			rs.setLong(4, buildingDTO.getNumberOfBasement());
+//			rs.setLong(5, buildingDTO.getFloorArea());
+//			//setValue(buildingDTO, rs);
+//			rs.executeUpdate();
+//			conn.commit();
+//			result = rs.getGeneratedKeys();
+//			if (result.next()) {
+//				return result.getLong(1);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			if(conn!=null) {
+//				try {
+//					conn.rollback();
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//		} finally {
+//
+//			try {
+//				if (result != null) {
+//					result.close();
+//				}
+//				if (rs != null)
+//					rs.close();
+//				if (conn != null)
+//					conn.close();
+//			} catch (SQLException se) {
+//
+//				se.printStackTrace();
+//			}
+//		} // end try
+//		return null;
+//
+//	}
 
 
 

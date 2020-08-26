@@ -23,7 +23,7 @@ public class BuildingAPI {
 	private BuildingService buildingService = new BuildingServiceImpl();
 	
 	//Create
-	@PostMapping("/get-buildings")
+	@PostMapping("/buildings")
 	public BuildingDTO createBuildings(@RequestBody BuildingDTO buildingDTO){
 		BuildingDTO newbuilding = buildingService.save(buildingDTO); 
 		return newbuilding;

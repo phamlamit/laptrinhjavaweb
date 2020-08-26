@@ -9,7 +9,7 @@ import com.laptrinhjavaweb.entity.BuildingEntity;
 
 public interface BuildingRepository extends SimpleJpaRepository<BuildingEntity>{
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
-	Long save(BuildingDTO buildingDTO);
+	//Long save(BuildingDTO buildingDTO);
 	BuildingDTO findById(Long buildingId);
 	Long saveWithTransaction(BuildingDTO buildingDTO);
 

@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
@@ -26,21 +27,33 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public BuildingDTO save(BuildingDTO buildingDTO) {
-		//open transasction
-		
+		// open transasction
+
 //		String rentArea = buildingDTO.getRentArea();
 //		String[] valueRentArea = rentArea.split(",");
 //
 //		buildingDTO.setRentAreas(valueRentArea);
 //		Long buildingId = buildingRepository.saveWithTransaction(buildingDTO);
-		//chuyen tu buildingDTO -> buildingEntity
-		
+		// chuyen tu buildingDTO -> buildingEntity
+
 		BuildingEntity buildingEntity = new BuildingEntity();
 		buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-		Long buildingId=buildingRepository.save(buildingEntity);
-		RentAreaEntity rentAreaEntity = new RentAreaEntity();
-		rentAreaRepository.save(rentAreaEntity);
+		Long buildingId = buildingRepository.save(buildingEntity);
+		// RentAreaEntity rentAreaEntity = new RentAreaEntity();
+		// rentAreaRepository.save(rentAreaEntity);
 		return buildingRepository.findById(buildingId);
+	}
+
+	@Override
+	public List<BuildingDTO> fillAll() {
+		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
+		List<BuildingEntity> buildingEntity = buildingRepository.fillAll();
+		for (BuildingEntity building : buildingEntity) {
+			BuildingDTO buildingDTO = buildingConverter.convertToDto(building);
+			result.add(buildingDTO);
+
+		}
+		return null;
 	}
 
 }
