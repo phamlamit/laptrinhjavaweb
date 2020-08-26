@@ -1,7 +1,6 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,8 +32,7 @@ public class RentAreaRepositoryImpl extends SimpleJpaRepositoryImpl<RentAreaEnti
 			if(rs.next()) {
 				return rs.getLong(1);
 			}
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 			} catch (SQLException e2) {

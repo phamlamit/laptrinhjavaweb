@@ -3,8 +3,8 @@ package com.laptrinhjavaweb.service.impl;
 import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
+import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
@@ -16,6 +16,7 @@ import com.laptrinhjavaweb.service.BuildingService;
 public class BuildingServiceImpl implements BuildingService {
 	private BuildingRepository buildingRepository = new BuildingRepositoryImpl();
 	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryImpl();
+	private BuildingConverter buildingConverter = new BuildingConverter();
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -33,7 +34,9 @@ public class BuildingServiceImpl implements BuildingService {
 //		buildingDTO.setRentAreas(valueRentArea);
 //		Long buildingId = buildingRepository.saveWithTransaction(buildingDTO);
 		//chuyen tu buildingDTO -> buildingEntity
+		
 		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity = buildingConverter.convertToEntity(buildingDTO);
 		Long buildingId=buildingRepository.save(buildingEntity);
 		RentAreaEntity rentAreaEntity = new RentAreaEntity();
 		rentAreaRepository.save(rentAreaEntity);
