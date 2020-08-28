@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.service;
 import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
+import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
 
@@ -18,4 +19,6 @@ public interface BuildingService {
 	BuildingDTO update(BuildingDTO buildingDTO);
 
 	List<UserDTO> fillAll(Long buildingId);
+
+	List<AssignmentBuildingDTO> updateUserAssignmentBuilding(Long id, List<String> listId);
 }

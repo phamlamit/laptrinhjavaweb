@@ -111,4 +111,25 @@ public class BuildingServiceImpl implements BuildingService {
 		return result;
 	}
 
+	@Override
+	public List<AssignmentBuildingDTO> updateUserAssignmentBuilding(Long buildingId, List<String> listId) {
+		assignmentBuildingRepository.deleteByBuildingId(buildingId);
+		List<AssignmentBuildingDTO> result = new ArrayList<AssignmentBuildingDTO>();
+		for (String value : listId) {
+			
+			AssignmentBuildingEntity assignmentBuildingEntity= new AssignmentBuildingEntity();
+			assignmentBuildingEntity.setBuildingid(buildingId);
+			assignmentBuildingEntity.setStaffid(Long.parseLong(value));
+			Long id = assignmentBuildingRepository.save(assignmentBuildingEntity);					
+		}
+		List<AssignmentBuildingEntity> list = assignmentBuildingRepository.fillAll();
+		for (AssignmentBuildingEntity assignmentBuildingEntity : list) {
+			AssignmentBuildingDTO assignmentBuildingDTO = assignmentBuildingConverter.convertToDTO(assignmentBuildingEntity);
+			result.add(assignmentBuildingDTO);
+		}
+		return result;
+	}
+
+	
+
 }
