@@ -31,8 +31,9 @@ public class ResultSetMapper<T> {
 							break;
 						}
 					}
-					result.add(object);
+					
 				}
+				result.add(object);
 
 			}
 		} catch (Exception e) {

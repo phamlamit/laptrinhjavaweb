@@ -8,5 +8,5 @@ public interface JpaRepository<T> {
 	List<T> fillAll(String sql);
 	T findById(long id);
 	void delete(Long id);
-	Long update(T t);
+	Long update(Long id,T t);
 }

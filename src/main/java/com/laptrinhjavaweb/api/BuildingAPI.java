@@ -35,6 +35,13 @@ public class BuildingAPI {
 		return result;
 	}
 	
+	@PostMapping("/buildings/update")
+	public BuildingDTO updateBuilding(@RequestBody BuildingDTO buildingDTO) {
+		BuildingDTO result = new BuildingDTO();
+		result = buildingService.update(buildingDTO);
+		return result;
+	}
+	
 	//Search nhung chua tao buildingInput
 	/*
 	 * @PostMapping("/get-buildings") public List<BuildingDTO>

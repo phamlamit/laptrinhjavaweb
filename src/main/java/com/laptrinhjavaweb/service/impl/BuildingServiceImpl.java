@@ -66,8 +66,12 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public BuildingDTO update(BuildingDTO buildingDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		Long id = buildingDTO.getId();
+		BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
+		id = buildingRepository.update(id, buildingEntity);
+		buildingEntity = buildingRepository.findById(id);
+		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
+		return result;
 	}
 
 }

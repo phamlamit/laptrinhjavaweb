@@ -267,9 +267,82 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 	}
 
 	@Override
-	public Long update(T t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Long update(Long id, Object object) {
+		Connection conn = null;
+		PreparedStatement rs = null;
+		ResultSet result = null;
+		try {
+			conn = EntityManagerFactory.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			String sql = buildingSqlUpdate();
+
+			rs = conn.prepareStatement(sql);
+			int index = 1;
+			for (Field feild : object.getClass().getDeclaredFields()) {
+				feild.setAccessible(true);
+				rs.setObject(index, feild.get(object));
+				index++;
+			}
+			rs.setLong(index,id);
+			rs.executeUpdate();
+			conn.commit();
+
+		} catch (SQLException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		} finally {
+
+			try {
+				if (result != null) {
+					result.close();
+				}
+				if (rs != null)
+					rs.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+
+			}
+
+		} // end try
+		return id;
+
+	}
+
+	private String buildingSqlUpdate() {
+		Type t = getClass().getGenericSuperclass();
+		ParameterizedType p = (ParameterizedType) t;
+		Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			Table table = zClass.getAnnotation(Table.class);
+			tableName = table.name();
+		}
+		StringBuilder sqlUpdate = new StringBuilder("");
+		for (Field field : zClass.getDeclaredFields()) {
+			if (sqlUpdate.length() > 1) {
+				sqlUpdate.append(" , ");
+			}
+			if (field.isAnnotationPresent(Column.class)) {
+				Column column = field.getAnnotation(Column.class);
+				sqlUpdate.append(column.name());
+				sqlUpdate.append(" = ?");
+			}
+			
+			
+		}
+		String sql = "UPDATE " + tableName + " SET " + sqlUpdate.toString() + " WHERE id = ?";
+		return sql;
 	}
 
 }
