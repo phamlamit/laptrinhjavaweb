@@ -4,20 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
+import com.laptrinhjavaweb.converter.AssignmentBuildingConverter;
 import com.laptrinhjavaweb.converter.BuildingConverter;
+import com.laptrinhjavaweb.converter.UserConverter;
+import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.BuildingEntity;
-import com.laptrinhjavaweb.entity.RentAreaEntity;
+import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.repository.jdbc.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.RentAreaRepository;
+import com.laptrinhjavaweb.repository.jdbc.UserRepository;
+import com.laptrinhjavaweb.repository.jdbc.impl.AssignmentBuildingRepositoryImpl;
 import com.laptrinhjavaweb.repository.jdbc.impl.BuildingRepositoryImpl;
 import com.laptrinhjavaweb.repository.jdbc.impl.RentAreaRepositoryImpl;
+import com.laptrinhjavaweb.repository.jdbc.impl.UserRepositoryImpl;
 import com.laptrinhjavaweb.service.BuildingService;
 
 public class BuildingServiceImpl implements BuildingService {
 	private BuildingRepository buildingRepository = new BuildingRepositoryImpl();
 	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryImpl();
 	private BuildingConverter buildingConverter = new BuildingConverter();
+	private UserRepository userRepository = new UserRepositoryImpl();
+	private AssignmentBuildingRepository assignmentBuildingRepository = new AssignmentBuildingRepositoryImpl();
+	private UserConverter userConverter = new UserConverter();
+	private AssignmentBuildingConverter assignmentBuildingConverter = new AssignmentBuildingConverter();
 
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
@@ -71,6 +84,30 @@ public class BuildingServiceImpl implements BuildingService {
 		id = buildingRepository.update(id, buildingEntity);
 		buildingEntity = buildingRepository.findById(id);
 		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
+		return result;
+	}
+
+	public List<UserDTO> fillAll(Long buildingId) {
+		List<UserDTO> result = new ArrayList<>();
+		List<UserEntity> listUserEntity = userRepository.fillAll();
+		for (UserEntity userEntity : listUserEntity) {
+			UserDTO userDto = userConverter.convertToDto(userEntity);
+			result.add(userDto);
+		}
+		List<AssignmentBuildingDTO> listAssignmentBuildingDTO = new ArrayList<>();
+		List<AssignmentBuildingEntity> listAssignmentBuildingEntity = assignmentBuildingRepository.fillAll(buildingId);
+		for (AssignmentBuildingEntity assignmentBuildingEntity : listAssignmentBuildingEntity) {
+			AssignmentBuildingDTO assignmentBuildingDTO = assignmentBuildingConverter
+					.convertToDTO(assignmentBuildingEntity);
+			listAssignmentBuildingDTO.add(assignmentBuildingDTO);
+		}
+		for (AssignmentBuildingDTO assignmentBuildingDTO : listAssignmentBuildingDTO) {
+			for (UserDTO userDto : result) {
+				if (assignmentBuildingDTO.getStaffid() == userDto.getId()) {
+					userDto.setChecked(true);
+				}
+			}
+		}
 		return result;
 	}
 

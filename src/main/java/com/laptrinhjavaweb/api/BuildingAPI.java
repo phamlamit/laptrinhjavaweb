@@ -8,12 +8,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.service.BuildingService;
 import com.laptrinhjavaweb.service.impl.BuildingServiceImpl;
 
@@ -39,6 +39,11 @@ public class BuildingAPI {
 	public BuildingDTO updateBuilding(@RequestBody BuildingDTO buildingDTO) {
 		BuildingDTO result = new BuildingDTO();
 		result = buildingService.update(buildingDTO);
+		return result;
+	}
+	@GetMapping("/assignemt-building")
+	public List<UserDTO> getUser(@RequestParam("id") String id){
+		List<UserDTO> result = buildingService.fillAll(Long.parseLong(id));
 		return result;
 	}
 	

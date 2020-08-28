@@ -15,6 +15,7 @@ import java.util.List;
 import com.laptrinhjavaweb.annotation.Column;
 import com.laptrinhjavaweb.annotation.Table;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 import com.laptrinhjavaweb.util.ResultSetMapper;
 
@@ -283,7 +284,7 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 				rs.setObject(index, feild.get(object));
 				index++;
 			}
-			rs.setLong(index,id);
+			rs.setLong(index, id);
 			rs.executeUpdate();
 			conn.commit();
 
@@ -338,11 +339,60 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 				sqlUpdate.append(column.name());
 				sqlUpdate.append(" = ?");
 			}
-			
-			
+
 		}
 		String sql = "UPDATE " + tableName + " SET " + sqlUpdate.toString() + " WHERE id = ?";
 		return sql;
 	}
 
+	@Override
+	public List<T> fillAll(Long buildingId) {
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+		List<T> result = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+
+			conn = EntityManagerFactory.getInstance().getConnection();
+
+			String tableName = "";
+			Type t = getClass().getGenericSuperclass();
+			ParameterizedType p = (ParameterizedType) t;
+			Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+
+			String sql = "SELECT * FROM " + tableName + " where buildingid = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, buildingId);
+			rs = stmt.executeQuery();
+			result = resultSetMapper.mapRow(rs, zClass);
+			return result;
+
+		} catch (SQLException se) {
+
+			se.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+			}
+		}
+		return result;
+	}
 }
