@@ -134,9 +134,9 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 				tableName = table.name();
 			}
 
-			String sql = "SELECT * FROM " + tableName + " b where 1=1";
+			String sql = "SELECT * FROM " + tableName + " where 1=1";
 			rs = stmt.executeQuery(sql);
-			return resultSetMapper.mapRow(rs, this.zClass);
+			return resultSetMapper.mapRow(rs, zClass);
 
 		} catch (SQLException se) {
 
@@ -183,7 +183,7 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 				tableName = table.name();
 			}
 
-			String sql = "SELECT * FROM " + tableName + " b where id = ?";
+			String sql = "SELECT * FROM " + tableName + " where id = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setLong(1, id);
 			rs = stmt.executeQuery();
@@ -216,6 +216,58 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 
 	@Override
 	public List<T> fillAll(String sql) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(Long id) {
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+		T result = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+
+			conn = EntityManagerFactory.getInstance().getConnection();
+
+			String tableName = "";
+			Type t = getClass().getGenericSuperclass();
+			ParameterizedType p = (ParameterizedType) t;
+			Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+
+			String sql = "DELETE FROM " + tableName + " where id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+			stmt.executeUpdate();
+
+		} catch (SQLException se) {
+
+			se.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
+	public Long update(T t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -9,4 +9,6 @@ public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
 	BuildingDTO save(BuildingDTO buildingDTO);
 	List<BuildingDTO> fillAll();
+	List<BuildingDTO> delete(Long id);
+	BuildingDTO update(BuildingDTO buildingDTO);
 }

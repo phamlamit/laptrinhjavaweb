@@ -7,5 +7,6 @@ public interface JpaRepository<T> {
 	List<T> fillAll();
 	List<T> fillAll(String sql);
 	T findById(long id);
-
+	void delete(Long id);
+	Long update(T t);
 }

@@ -57,4 +57,17 @@ public class BuildingServiceImpl implements BuildingService {
 		return result;
 	}
 
+	@Override
+	public List<BuildingDTO> delete(Long id) {
+		buildingRepository.delete(id);
+		List<BuildingDTO> result = fillAll();
+		return result;
+	}
+
+	@Override
+	public BuildingDTO update(BuildingDTO buildingDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

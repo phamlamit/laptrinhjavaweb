@@ -29,6 +29,12 @@ public class BuildingAPI {
 		return newbuilding;
 	}
 	
+	@GetMapping("/buildings/delete")
+	public List<BuildingDTO> deleteBuilding(@RequestParam("id")  String id){
+		List<BuildingDTO> result = buildingService.delete(Long.parseLong(id));
+		return result;
+	}
+	
 	//Search nhung chua tao buildingInput
 	/*
 	 * @PostMapping("/get-buildings") public List<BuildingDTO>
