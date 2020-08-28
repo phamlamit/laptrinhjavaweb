@@ -15,10 +15,10 @@ import java.util.List;
 import com.laptrinhjavaweb.annotation.Column;
 import com.laptrinhjavaweb.annotation.Table;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.repository.jdbc.SimpleJpaRepository;
+import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 import com.laptrinhjavaweb.util.ResultSetMapper;
 
-public class SimpleJpaRepositoryImpl<T> implements SimpleJpaRepository<T> {
+public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 
 	private Class<T> zClass;
 
@@ -87,7 +87,9 @@ public class SimpleJpaRepositoryImpl<T> implements SimpleJpaRepository<T> {
 	}
 
 	private String buildSqlInsert() {
-		
+		Type t = getClass().getGenericSuperclass();
+		ParameterizedType p = (ParameterizedType) t;
+		Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
 		String tableName = "";
 		if (zClass.isAnnotationPresent(Table.class)) {
 			Table table = zClass.getAnnotation(Table.class);
@@ -123,7 +125,9 @@ public class SimpleJpaRepositoryImpl<T> implements SimpleJpaRepository<T> {
 			conn = EntityManagerFactory.getInstance().getConnection();
 
 			stmt = conn.createStatement();
-			
+			Type t = getClass().getGenericSuperclass();
+			ParameterizedType p = (ParameterizedType) t;
+			Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
 			String tableName = "";
 			if (zClass.isAnnotationPresent(Table.class)) {
 				Table table = zClass.getAnnotation(Table.class);
@@ -161,8 +165,53 @@ public class SimpleJpaRepositoryImpl<T> implements SimpleJpaRepository<T> {
 
 	@Override
 	public T findById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+		T result = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+
+			conn = EntityManagerFactory.getInstance().getConnection();
+
+			String tableName = "";
+			Type t = getClass().getGenericSuperclass();
+			ParameterizedType p = (ParameterizedType) t;
+			Class<T> zClass = (Class<T>) p.getActualTypeArguments()[0];
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+
+			String sql = "SELECT * FROM " + tableName + " b where id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+			rs = stmt.executeQuery();
+			result = resultSetMapper.mapRow(rs, zClass).get(0);
+			return result;
+
+		} catch (SQLException se) {
+
+			se.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+
+				se.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	@Override

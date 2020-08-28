@@ -16,7 +16,7 @@ public class ResultSetMapper<T> {
 	public List<T> mapRow(ResultSet rs, Class<T> zClass) {
 		List<T> result = new ArrayList<>();
 		try {
-			Field[] fields = zClass.getClass().getDeclaredFields();
+			Field[] fields = zClass.getDeclaredFields();
 			ResultSetMetaData resultSetMetaData = rs.getMetaData();
 			while (rs.next()) {
 
@@ -26,11 +26,12 @@ public class ResultSetMapper<T> {
 					Object columnValue = rs.getObject(columnName);
 					for (Field field : fields) {
 						Column column = field.getAnnotation(Column.class);
-						if (column.name().equals(columnName) && column.name() != null) {
+						if (column.name().equals(columnName) && columnValue != null) {
 							BeanUtils.setProperty(object, field.getName(), columnValue);
 							break;
 						}
 					}
+					result.add(object);
 				}
 
 			}
@@ -38,7 +39,9 @@ public class ResultSetMapper<T> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return result;
+
 	}
 
 }

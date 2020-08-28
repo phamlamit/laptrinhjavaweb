@@ -1,9 +1,13 @@
 package com.laptrinhjavaweb.entity;
 
+import com.laptrinhjavaweb.annotation.Entity;
 import com.laptrinhjavaweb.annotation.Column;
+
 import com.laptrinhjavaweb.annotation.Table;
 
+@Entity
 @Table(name = "building")
+
 public class BuildingEntity {
 
 	@Column(name = "name")
@@ -21,7 +25,7 @@ public class BuildingEntity {
 	@Column(name = "structure")
 	private String structure;
 
-	@Column(name = "numberOfBasement")
+	@Column(name = "numberofbasement")
 	private Integer numberOfBasement;
 
 	public String getName() {

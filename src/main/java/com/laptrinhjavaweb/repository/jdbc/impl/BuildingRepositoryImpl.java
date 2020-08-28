@@ -14,7 +14,7 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
-import com.laptrinhjavaweb.repository.jdbc.SimpleJpaRepository;
+import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 
 public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEntity> implements BuildingRepository {
 
@@ -156,55 +156,55 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
 
 
 
-	@Override
-	public BuildingDTO findById(Long buildingId) {
-		BuildingDTO buildingDTO = new BuildingDTO();
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			conn = EntityManagerFactory.getInstance().getConnection();
-			String sql = "Select * FROM building WHERE id = ?";
-			stmt = conn.prepareStatement(sql);
-			stmt.setLong(1, buildingId);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
-				String ward = rs.getString("ward");
-				String street = rs.getString("street");
-				String district = rs.getString("district");
-				String structure = rs.getString("structure");
-				buildingDTO.setId(id);
-				buildingDTO.setName(name);
-				buildingDTO.setWard(ward);
-				buildingDTO.setStreet(street);
-				buildingDTO.setDistrict(district);
-				buildingDTO.setStructure(structure);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt != null)
-					stmt.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-
-				se.printStackTrace();
-			}
-			
-		}
-
-		return buildingDTO;
-	}
+//	@Override
+//	public BuildingDTO findById(Long buildingId) {
+//		BuildingDTO buildingDTO = new BuildingDTO();
+//		Connection conn = null;
+//		PreparedStatement stmt = null;
+//		ResultSet rs = null;
+//
+//		try {
+//			conn = EntityManagerFactory.getInstance().getConnection();
+//			String sql = "Select * FROM building WHERE id = ?";
+//			stmt = conn.prepareStatement(sql);
+//			stmt.setLong(1, buildingId);
+//			rs = stmt.executeQuery();
+//			while (rs.next()) {
+//
+//				Long id = rs.getLong("id");
+//				String name = rs.getString("name");
+//				String ward = rs.getString("ward");
+//				String street = rs.getString("street");
+//				String district = rs.getString("district");
+//				String structure = rs.getString("structure");
+//				buildingDTO.setId(id);
+//				buildingDTO.setName(name);
+//				buildingDTO.setWard(ward);
+//				buildingDTO.setStreet(street);
+//				buildingDTO.setDistrict(district);
+//				buildingDTO.setStructure(structure);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}finally {
+//			try {
+//				if (rs != null) {
+//					rs.close();
+//				}
+//				if (stmt != null)
+//					stmt.close();
+//				if (conn != null)
+//					conn.close();
+//			} catch (SQLException se) {
+//
+//				se.printStackTrace();
+//			}
+//			
+//		}
+//
+//		return buildingDTO;
+//	}
 
 	@Override
 	public Long saveWithTransaction(BuildingDTO buildingDTO) {

@@ -41,7 +41,8 @@ public class BuildingServiceImpl implements BuildingService {
 		Long buildingId = buildingRepository.save(buildingEntity);
 		// RentAreaEntity rentAreaEntity = new RentAreaEntity();
 		// rentAreaRepository.save(rentAreaEntity);
-		return buildingRepository.findById(buildingId);
+
+		return buildingConverter.convertToDto(buildingRepository.findById(buildingId));
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class BuildingServiceImpl implements BuildingService {
 			result.add(buildingDTO);
 
 		}
-		return null;
+		return result;
 	}
 
 }
