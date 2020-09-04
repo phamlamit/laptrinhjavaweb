@@ -18,87 +18,125 @@ import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 
 public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEntity> implements BuildingRepository {
 
-	@Override
-	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-		List<BuildingDTO> result = new ArrayList<>();
-		Connection conn = null;
-		Statement stmt = null;
-		try {
+    @Override
+    public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
+        List<BuildingDTO> result = new ArrayList<>();
+        Connection conn = null;
+        Statement stmt = null;
+        try {
 
-			conn = EntityManagerFactory.getInstance().getConnection();
+            conn = EntityManagerFactory.getInstance().getConnection();
 
-			stmt = conn.createStatement();
+            stmt = conn.createStatement();
 
-			StringBuffer sql = new StringBuffer();
-			sql.append("SELECT * FROM building b where 1=1");
+            StringBuffer sql = new StringBuffer();
+            sql.append("SELECT * FROM building b where 1=1");
+            if(buildingSearchBuilder.getStaffId()!=null){
+                sql.append(" join assignmentbuilding a on b.id = a.buildingid");
+            }
 
-			sql = buildSqlBuildingSearch(buildingSearchBuilder, sql);
-			ResultSet rs = stmt.executeQuery(sql.toString());
-			while (rs.next()) {
-				BuildingDTO buildingDTO = new BuildingDTO();
-				Long id = rs.getLong("id");
-				String name = rs.getString("name");
-				Integer numberofbasement = rs.getInt("numberofbasement");
-				result.add(buildingDTO);
-				buildingDTO.setName(name);
-				buildingDTO.setNumberOfBasement(numberofbasement);
-				buildingDTO.setId(id);
-			}
-			rs.close();
-		} catch (SQLException se) {
+            sql = buildSqlBuildingSearchComon(buildingSearchBuilder, sql);
+            sql = buildingSqlBuildingSearchSpecial(sql, buildingSearchBuilder);
+            if(buildingSearchBuilder.getStaffId()!=null){
+                sql.append(" and a.staffid = "+buildingSearchBuilder.getStaffId()+ " ");
+            }
+            ResultSet rs = stmt.executeQuery(sql.toString());
+            while (rs.next()) {
+                BuildingDTO buildingDTO = new BuildingDTO();
+                Long id = rs.getLong("id");
+                String name = rs.getString("name");
+                Integer numberofbasement = rs.getInt("numberofbasement");
+                result.add(buildingDTO);
+                buildingDTO.setName(name);
+                buildingDTO.setNumberOfBasement(numberofbasement);
+                buildingDTO.setId(id);
+            }
+            rs.close();
+        } catch (SQLException se) {
 
-			se.printStackTrace();
-		} catch (Exception e) {
+            se.printStackTrace();
+        } catch (Exception e) {
 
-			e.printStackTrace();
-		} finally {
+            e.printStackTrace();
+        } finally {
 
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
 
-				se.printStackTrace();
-			}
-		}
+                se.printStackTrace();
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	private StringBuffer buildSqlBuildingSearch(BuildingSearchBuilder buildingSearchBuilder, StringBuffer sql) {
-		try {
-			Field[] fields = BuildingSearchBuilder.class.getDeclaredFields();
-			for (Field field : fields) {
-				if (!field.getName().equals("nameEmployeeInCharge") && !field.getName().startsWith("rentArea")
-						&& !field.getName().startsWith("rentPrice") && !field.getName().equals("types")) {
-					String fieldType = field.getType().getName();
-					field.setAccessible(true);
-					if (fieldType.equals("java.lang.String")) {
-						if (field.get(buildingSearchBuilder) != null) {
-							sql.append(" and b." + field.getName().toLowerCase() + " like '%"
-									+ field.get(buildingSearchBuilder).toString() + "%'");
-						}
-					} else if (fieldType.equals("java.lang.Integer")) {
-						if (field.get(buildingSearchBuilder) != null) {
-							sql.append(" and b." + field.getName().toLowerCase() + " = "
-									+ field.get(buildingSearchBuilder) + "");
-						}
-					} else if (fieldType.equals("java.lang.Double")) {
-						if (field.get(buildingSearchBuilder) != null) {
-							sql.append(" and b." + field.getName().toLowerCase() + " = "
-									+ field.get(buildingSearchBuilder) + "");
-						}
-					}
-				}
-			}
-			return sql;
-		} catch (IllegalAccessException e) {
-			return new StringBuffer();
-		}
+    private StringBuffer buildingSqlBuildingSearchSpecial(StringBuffer sql, BuildingSearchBuilder buildingSearchBuilder) {
 
-	}
+        if (buildingSearchBuilder.getRentPriceFrom() != null) {
+            sql.append("and" + buildingSearchBuilder.getRentPriceFrom() + "<=b.rentprice");
+        } else if (buildingSearchBuilder.getRentPriceTo() != null) {
+            sql.append("and" + buildingSearchBuilder.getRentPriceTo() + ">=b.rentprice");
+        }
+        if(buildingSearchBuilder.getRentPriceFrom() != null || buildingSearchBuilder.getRentPriceTo() != null){
+            sql.append(" and EXISTS (SELECT * FROM rentarea (r WHERE  r.buildingid = b.id");
+            if(buildingSearchBuilder.getRentPriceFrom() != null){
+                sql.append("and r.value >= "+buildingSearchBuilder.getRentPriceFrom()+" ");
+            }
+            if(buildingSearchBuilder.getRentPriceTo() != null){
+                sql.append("and r.value <= "+buildingSearchBuilder.getRentPriceTo()+" ");
+            }
+            sql.append("))");
+        }
+        if(buildingSearchBuilder.getTypes() != null){
+            int lengthType = buildingSearchBuilder.getTypes().length;
+            sql.append(" and (b.type like '%"+buildingSearchBuilder.getTypes()[0]+"%");
+            for(int i=1;i<lengthType;i++){
+                if(i>=1){
+                    sql.append(" or b.type like '%"+buildingSearchBuilder.getTypes()[i]+"%");
+                }
+            }
+            sql.append(")");
+        }
+
+        return sql;
+    }
+
+    private StringBuffer buildSqlBuildingSearchComon(BuildingSearchBuilder buildingSearchBuilder, StringBuffer sql) {
+        try {
+            Field[] fields = BuildingSearchBuilder.class.getDeclaredFields();
+            for (Field field : fields) {
+                if (!field.getName().equals("nameEmployeeInCharge") && !field.getName().startsWith("rentArea")
+                        && !field.getName().startsWith("rentPrice") && !field.getName().equals("types")) {
+                    String fieldType = field.getType().getName();
+                    field.setAccessible(true);
+                    if (fieldType.equals("java.lang.String")) {
+                        if (field.get(buildingSearchBuilder) != null) {
+                            sql.append(" and b." + field.getName().toLowerCase() + " like '%"
+                                    + field.get(buildingSearchBuilder).toString() + "%'");
+                        }
+                    } else if (fieldType.equals("java.lang.Integer")) {
+                        if (field.get(buildingSearchBuilder) != null) {
+                            sql.append(" and b." + field.getName().toLowerCase() + " = "
+                                    + field.get(buildingSearchBuilder) + "");
+                        }
+                    } else if (fieldType.equals("java.lang.Double")) {
+                        if (field.get(buildingSearchBuilder) != null) {
+                            sql.append(" and b." + field.getName().toLowerCase() + " = "
+                                    + field.get(buildingSearchBuilder));
+                        }
+                    }
+                }
+            }
+            return sql;
+        } catch (IllegalAccessException e) {
+            return new StringBuffer();
+        }
+
+    }
 
 //	@Override
 //	public Long save(BuildingDTO buildingDTO) {
@@ -154,8 +192,6 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
 //	}
 
 
-
-
 //	@Override
 //	public BuildingDTO findById(Long buildingId) {
 //		BuildingDTO buildingDTO = new BuildingDTO();
@@ -206,77 +242,74 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
 //		return buildingDTO;
 //	}
 
-	@Override
-	public Long saveWithTransaction(BuildingDTO buildingDTO) {
-		Long buildingId = null;
-		Connection conn = null;
-		PreparedStatement rs = null;
-		ResultSet result = null;
-		try {
-			conn = EntityManagerFactory.getInstance().getConnection();
-			conn.setAutoCommit(false);
-			StringBuffer sql = new StringBuffer();
-			sql.append("Insert INTO building (name, street,district,numberOfBasement,floorArea) VALUES(?,?,?,?,?)");
-			
-			rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-			rs.setString(1, buildingDTO.getName());
-			rs.setString(2, buildingDTO.getStreet());
-			rs.setString(3, buildingDTO.getDistrict());
-			rs.setLong(4, buildingDTO.getNumberOfBasement());
-			rs.setLong(5, buildingDTO.getFloorArea());
-			rs.executeUpdate();
-			conn.commit();
-			result = rs.getGeneratedKeys();
-			
-			if (result.next()) {
-				buildingId=  result.getLong(1);
-			}
-			StringBuilder sqlSaveRentArea = new StringBuilder("INSERT INTO rentarea (value,buildingid) VALUES (?,?)");
-			rs = conn.prepareStatement(sqlSaveRentArea.toString());
-			
-			for (String value : buildingDTO.getRentAreas()) {
-				rs.setInt(1, Integer.parseInt(value));
-				rs.setLong(2, buildingId);
-				rs.executeUpdate();
-				conn.commit();
-			}
-			
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			
-			if(conn!=null) {
-				try {
-					conn.rollback();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		} finally {
+    @Override
+    public Long saveWithTransaction(BuildingDTO buildingDTO) {
+        Long buildingId = null;
+        Connection conn = null;
+        PreparedStatement rs = null;
+        ResultSet result = null;
+        try {
+            conn = EntityManagerFactory.getInstance().getConnection();
+            conn.setAutoCommit(false);
+            StringBuffer sql = new StringBuffer();
+            sql.append("Insert INTO building (name, street,district,numberOfBasement,floorArea) VALUES(?,?,?,?,?)");
 
-			try {
-				if (result != null) {
-					result.close();
-				}
-				if (rs != null)
-					rs.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
+            rs = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
+            rs.setString(1, buildingDTO.getName());
+            rs.setString(2, buildingDTO.getStreet());
+            rs.setString(3, buildingDTO.getDistrict());
+            rs.setLong(4, buildingDTO.getNumberOfBasement());
+            rs.setLong(5, buildingDTO.getFloorArea());
+            rs.executeUpdate();
+            conn.commit();
+            result = rs.getGeneratedKeys();
 
-				se.printStackTrace();
-				
-			}
-			
-		} // end try
-		return buildingId;
-		
+            if (result.next()) {
+                buildingId = result.getLong(1);
+            }
+            StringBuilder sqlSaveRentArea = new StringBuilder("INSERT INTO rentarea (value,buildingid) VALUES (?,?)");
+            rs = conn.prepareStatement(sqlSaveRentArea.toString());
 
-	}
+            for (String value : buildingDTO.getRentAreas()) {
+                rs.setInt(1, Integer.parseInt(value));
+                rs.setLong(2, buildingId);
+                rs.executeUpdate();
+                conn.commit();
+            }
 
 
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
 
-	
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (rs != null)
+                    rs.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+
+                se.printStackTrace();
+
+            }
+
+        } // end try
+        return buildingId;
+
+
+    }
+
+
 }

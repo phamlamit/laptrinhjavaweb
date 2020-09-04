@@ -17,6 +17,7 @@ public class BuildingSearchBuilder {
 	private String phone;
 	private String ward;
 	private String[] types = new String[] {};
+	private Long staffId;
 
 	public String getStreet() {
 		return street;
@@ -74,6 +75,10 @@ public class BuildingSearchBuilder {
 		return floorArea;
 	}
 
+	public Long getStaffId() {
+		return staffId;
+	}
+
 	private BuildingSearchBuilder(Builder builder) {
 		this.name = builder.name;
 		this.ward = builder.ward;
@@ -90,6 +95,7 @@ public class BuildingSearchBuilder {
 		this.rentPriceTo = builder.rentPriceTo;
 		this.street = builder.street;
 		this.nameEmployeeInCharge = builder.nameEmployeeInCharge;
+		this.staffId = builder.staffId;
 	}
 
 	public String[] getTypes() {
@@ -113,6 +119,7 @@ public class BuildingSearchBuilder {
 		private Integer numberOfBasement;
 		private Integer floorArea;
 		private String[] types = new String[] {};
+		private Long staffId;
 
 		public BuildingSearchBuilder build() {
 			return new BuildingSearchBuilder(this);
@@ -192,8 +199,11 @@ public class BuildingSearchBuilder {
 			this.types = types;
 			return this;
 		}
-		
 
+		public Builder setStaffId(Long staffId) {
+			this.staffId = staffId;
+			return this;
+		}
 	}
 
 }
