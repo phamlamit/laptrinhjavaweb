@@ -5,7 +5,7 @@ import java.util.List;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.StaffDTO;
 
 public interface BuildingService {
 	List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder);
@@ -18,7 +18,9 @@ public interface BuildingService {
 
 	BuildingDTO update(BuildingDTO buildingDTO);
 
-	List<UserDTO> fillAll(Long buildingId);
+	List<StaffDTO> fillAll(Long buildingId);
 
-	List<AssignmentBuildingDTO> updateUserAssignmentBuilding(Long id, List<String> listId);
+	List<StaffDTO> updateUserAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
+
+	BuildingDTO getBuildings(Long id);
 }

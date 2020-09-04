@@ -26,7 +26,7 @@ public class DistrictOutput {
     }
 
 
-    public List<DistrictOutput> getDistrictOutput() {
+    public List<DistrictOutput> listDistrictOutput() {
         List<DistrictOutput> districtOutputList = new ArrayList<DistrictOutput>();
         for (DistrictEnum districtEnum : DistrictEnum.values()) {
             DistrictOutput districtOutput = new DistrictOutput();

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.StaffDTO;
 import com.laptrinhjavaweb.service.BuildingService;
 import com.laptrinhjavaweb.service.impl.BuildingServiceImpl;
 
@@ -27,6 +27,13 @@ public class BuildingAPI {
 	public BuildingDTO createBuildings(@RequestBody BuildingDTO buildingDTO) {
 		BuildingDTO newbuilding = buildingService.save(buildingDTO);
 		return newbuilding;
+	}
+
+	@GetMapping("/building")
+	public BuildingDTO getBuilding(@RequestParam("id") String id){
+		BuildingDTO result = new BuildingDTO();
+		result = buildingService.getBuildings(Long.parseLong(id));
+		return result;
 	}
 
 	@GetMapping("/buildings/delete")
@@ -43,15 +50,14 @@ public class BuildingAPI {
 	}
 
 	@GetMapping("/assignemt-building")
-	public List<UserDTO> getUser(@RequestParam("id") String id) {
-		List<UserDTO> result = buildingService.fillAll(Long.parseLong(id));
+	public List<StaffDTO> getUser(@RequestParam("id") String id) {
+		List<StaffDTO> result = buildingService.fillAll(Long.parseLong(id));
 		return result;
 	}
 
-	@GetMapping("/assignemt-building/update")
-	public List<AssignmentBuildingDTO> updateUserAssignmentBuilding(@RequestParam("id") String id,
-			@RequestParam List<String> listid) {
-		List<AssignmentBuildingDTO> result = buildingService.updateUserAssignmentBuilding(Long.parseLong(id),listid);
+	@PostMapping("/assignemt-building/update")
+	public List<StaffDTO> updateUserAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+		List<StaffDTO> result = buildingService.updateUserAssignmentBuilding(assignmentBuildingDTO);
 		return result;
 	}
 	// Search nhung chua tao buildingInput

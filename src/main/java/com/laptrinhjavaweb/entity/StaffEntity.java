@@ -6,7 +6,7 @@ import com.laptrinhjavaweb.annotation.Table;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class StaffEntity {
 
 	@Column(name = "id")
 	private Long id;

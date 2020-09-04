@@ -9,25 +9,25 @@ import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.converter.UserConverter;
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.StaffDTO;
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
 import com.laptrinhjavaweb.entity.BuildingEntity;
-import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.entity.StaffEntity;
 import com.laptrinhjavaweb.repository.jdbc.AssignmentBuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.BuildingRepository;
 import com.laptrinhjavaweb.repository.jdbc.RentAreaRepository;
-import com.laptrinhjavaweb.repository.jdbc.UserRepository;
+import com.laptrinhjavaweb.repository.jdbc.StaffRepository;
 import com.laptrinhjavaweb.repository.jdbc.impl.AssignmentBuildingRepositoryImpl;
 import com.laptrinhjavaweb.repository.jdbc.impl.BuildingRepositoryImpl;
 import com.laptrinhjavaweb.repository.jdbc.impl.RentAreaRepositoryImpl;
-import com.laptrinhjavaweb.repository.jdbc.impl.UserRepositoryImpl;
+import com.laptrinhjavaweb.repository.jdbc.impl.StaffRepositoryImpl;
 import com.laptrinhjavaweb.service.BuildingService;
 
 public class BuildingServiceImpl implements BuildingService {
 	private BuildingRepository buildingRepository = new BuildingRepositoryImpl();
 	private RentAreaRepository rentAreaRepository = new RentAreaRepositoryImpl();
 	private BuildingConverter buildingConverter = new BuildingConverter();
-	private UserRepository userRepository = new UserRepositoryImpl();
+	private StaffRepository staffRepository = new StaffRepositoryImpl();
 	private AssignmentBuildingRepository assignmentBuildingRepository = new AssignmentBuildingRepositoryImpl();
 	private UserConverter userConverter = new UserConverter();
 	private AssignmentBuildingConverter assignmentBuildingConverter = new AssignmentBuildingConverter();
@@ -81,55 +81,64 @@ public class BuildingServiceImpl implements BuildingService {
 	public BuildingDTO update(BuildingDTO buildingDTO) {
 		Long id = buildingDTO.getId();
 		BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-		id = buildingRepository.update(id, buildingEntity);
+		id = buildingRepository.update(buildingEntity);
 		buildingEntity = buildingRepository.findById(id);
 		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
 		return result;
 	}
 
-	public List<UserDTO> fillAll(Long buildingId) {
-		List<UserDTO> result = new ArrayList<>();
-		List<UserEntity> listUserEntity = userRepository.fillAll();
-		for (UserEntity userEntity : listUserEntity) {
-			UserDTO userDto = userConverter.convertToDto(userEntity);
-			result.add(userDto);
-		}
-		List<AssignmentBuildingDTO> listAssignmentBuildingDTO = new ArrayList<>();
-		List<AssignmentBuildingEntity> listAssignmentBuildingEntity = assignmentBuildingRepository.fillAll(buildingId);
-		for (AssignmentBuildingEntity assignmentBuildingEntity : listAssignmentBuildingEntity) {
-			AssignmentBuildingDTO assignmentBuildingDTO = assignmentBuildingConverter
-					.convertToDTO(assignmentBuildingEntity);
-			listAssignmentBuildingDTO.add(assignmentBuildingDTO);
-		}
-		for (AssignmentBuildingDTO assignmentBuildingDTO : listAssignmentBuildingDTO) {
-			for (UserDTO userDto : result) {
-				if (assignmentBuildingDTO.getStaffid() == userDto.getId()) {
-					userDto.setChecked(true);
-				}
-			}
+	public List<StaffDTO> fillAll(Long buildingId) {
+		List<StaffDTO> result = new ArrayList<>();
+		List<StaffEntity> listStaffEntity = staffRepository.fillAllStaff();
+		for (StaffEntity staffEntity : listStaffEntity) {
+			StaffDTO staffDto = userConverter.convertToDto(staffEntity);
+			staffDto.setChecked(assignmentBuildingRepository.checked(buildingId, staffDto.getId()));
+			result.add(staffDto);
 		}
 		return result;
 	}
 
 	@Override
-	public List<AssignmentBuildingDTO> updateUserAssignmentBuilding(Long buildingId, List<String> listId) {
-		assignmentBuildingRepository.deleteByBuildingId(buildingId);
-		List<AssignmentBuildingDTO> result = new ArrayList<AssignmentBuildingDTO>();
-		for (String value : listId) {
-			
-			AssignmentBuildingEntity assignmentBuildingEntity= new AssignmentBuildingEntity();
-			assignmentBuildingEntity.setBuildingid(buildingId);
-			assignmentBuildingEntity.setStaffid(Long.parseLong(value));
-			Long id = assignmentBuildingRepository.save(assignmentBuildingEntity);					
+	public List<StaffDTO> updateUserAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
+		List<StaffDTO> result = new ArrayList<>();
+		List<Long> oldListStaff = assignmentBuildingRepository.getStaff(assignmentBuildingDTO.getBuildingId());
+		List<Long> newListStaff = assignmentBuildingDTO.convertToList();
+		List<Long> checkedList = new ArrayList<>();
+		List<Long> unCheckedList = new ArrayList<>();
+		for(Long newId : newListStaff){
+			if(!oldListStaff.contains(newId)){
+				unCheckedList.add(newId);
+			}
 		}
-		List<AssignmentBuildingEntity> list = assignmentBuildingRepository.fillAll();
-		for (AssignmentBuildingEntity assignmentBuildingEntity : list) {
-			AssignmentBuildingDTO assignmentBuildingDTO = assignmentBuildingConverter.convertToDTO(assignmentBuildingEntity);
-			result.add(assignmentBuildingDTO);
+		for(Long oldId : oldListStaff){
+			if(!newListStaff.contains(oldId)){
+				checkedList.add(oldId);
+			}
 		}
+		if(!checkedList.isEmpty()){
+			for(Long id :  checkedList){
+				assignmentBuildingRepository.delete(assignmentBuildingDTO.getBuildingId(),id);
+			}
+		}
+		if(!unCheckedList.isEmpty()){
+			for(Long id : unCheckedList){
+				AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
+				assignmentBuildingEntity.setBuildingid(assignmentBuildingDTO.getBuildingId());
+				assignmentBuildingEntity.setStaffid(id);
+				assignmentBuildingRepository.save(assignmentBuildingEntity);
+			}
+		}
+
+		return fillAll(assignmentBuildingDTO.getBuildingId());
+	}
+
+	@Override
+	public BuildingDTO getBuildings(Long id) {
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity = buildingRepository.findById(id);
+		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
 		return result;
 	}
 
-	
 
 }

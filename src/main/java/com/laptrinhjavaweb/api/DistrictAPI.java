@@ -11,7 +11,7 @@ public class DistrictAPI {
     @GetMapping("/districts")
     public List<DistrictOutput> getDistrict() {
         DistrictOutput districtOutput = new DistrictOutput();
-        List<DistrictOutput> result = districtOutput.getDistrictOutput();
+        List<DistrictOutput> result = districtOutput.listDistrictOutput();
         return result;
     }
 }

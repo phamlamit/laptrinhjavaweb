@@ -1,6 +1,6 @@
 package com.laptrinhjavaweb.dto;
 
-public class UserDTO {
+public class StaffDTO {
 	private Long id;
 	private String username;
 	private String password;
