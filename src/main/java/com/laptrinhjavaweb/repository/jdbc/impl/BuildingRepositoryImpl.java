@@ -19,8 +19,8 @@ import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEntity> implements BuildingRepository {
 
     @Override
-    public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-        List<BuildingDTO> result = new ArrayList<>();
+    public List<BuildingEntity> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
+        List<BuildingEntity> result = new ArrayList<>();
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -42,14 +42,14 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
             }
             ResultSet rs = stmt.executeQuery(sql.toString());
             while (rs.next()) {
-                BuildingDTO buildingDTO = new BuildingDTO();
+                BuildingEntity buildingEntity = new BuildingEntity();
                 Long id = rs.getLong("id");
                 String name = rs.getString("name");
                 Integer numberofbasement = rs.getInt("numberofbasement");
-                result.add(buildingDTO);
-                buildingDTO.setName(name);
-                buildingDTO.setNumberOfBasement(numberofbasement);
-                buildingDTO.setId(id);
+                result.add(buildingEntity);
+                buildingEntity.setName(name);
+                buildingEntity.setNumberOfBasement(numberofbasement);
+                buildingEntity.setId(id);
             }
             rs.close();
         } catch (SQLException se) {

@@ -35,7 +35,17 @@ public class BuildingServiceImpl implements BuildingService {
 	@Override
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
 		// TODO Auto-generated method stub
-		return buildingRepository.getBuildings(buildingSearchBuilder);
+		//java 7 :
+		List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingSearchBuilder);
+		List<BuildingDTO> result = new ArrayList<>();
+		for(BuildingEntity buildingEntity : listBuildingEntity){
+			BuildingDTO buildingDTO = buildingConverter.convertToDto(buildingEntity);
+			result.add(buildingDTO);
+		}
+		return result;
+
+
+//		return null;
 	}
 
 	@Override
