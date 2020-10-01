@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.converter.AssignmentBuildingConverter;
@@ -36,16 +37,21 @@ public class BuildingServiceImpl implements BuildingService {
 	public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
 		// TODO Auto-generated method stub
 		//java 7 :
-		List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingSearchBuilder);
+		/*List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingSearchBuilder);
 		List<BuildingDTO> result = new ArrayList<>();
 		for(BuildingEntity buildingEntity : listBuildingEntity){
 			BuildingDTO buildingDTO = buildingConverter.convertToDto(buildingEntity);
 			result.add(buildingDTO);
 		}
+		return result;*/
+
+
+		//Java 8
+		List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingSearchBuilder);
+		List<BuildingDTO> result = listBuildingEntity.stream()
+									.map(item-> buildingConverter.convertToDto(item))
+									.collect(Collectors.toList());
 		return result;
-
-
-//		return null;
 	}
 
 	@Override
@@ -100,11 +106,16 @@ public class BuildingServiceImpl implements BuildingService {
 	public List<StaffDTO> fillAll(Long buildingId) {
 		List<StaffDTO> result = new ArrayList<>();
 		List<StaffEntity> listStaffEntity = staffRepository.fillAllStaff();
-		for (StaffEntity staffEntity : listStaffEntity) {
+		/*for (StaffEntity staffEntity : listStaffEntity) {
 			StaffDTO staffDto = userConverter.convertToDto(staffEntity);
 			staffDto.setChecked(assignmentBuildingRepository.checked(buildingId, staffDto.getId()));
 			result.add(staffDto);
-		}
+		}*/
+		result = listStaffEntity.stream().map(item -> {
+			StaffDTO staffDTO = userConverter.convertToDto(item);
+			staffDTO.setChecked(assignmentBuildingRepository.checked(buildingId, staffDTO.getId()));
+			return staffDTO;
+		}).collect(Collectors.toList());
 		return result;
 	}
 
