@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
@@ -155,10 +156,9 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public BuildingDTO getBuildings(Long id) {
-		BuildingEntity buildingEntity = new BuildingEntity();
-		buildingEntity = buildingRepository.findById(id);
-		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
-		return result;
+		BuildingEntity buildingEntity =  buildingRepository.findById(id);
+//		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
+		return Optional.ofNullable(buildingEntity).map(item->buildingConverter.convertToDto(item)).orElse(null);
 	}
 
 

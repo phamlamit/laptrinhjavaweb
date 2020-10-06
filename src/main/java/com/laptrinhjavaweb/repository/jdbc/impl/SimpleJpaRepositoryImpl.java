@@ -1,23 +1,17 @@
 package com.laptrinhjavaweb.repository.jdbc.impl;
 
-import java.lang.annotation.Target;
+import com.laptrinhjavaweb.annotation.Column;
+import com.laptrinhjavaweb.annotation.Table;
+import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
+import com.laptrinhjavaweb.util.ResultSetMapper;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.laptrinhjavaweb.annotation.Column;
-import com.laptrinhjavaweb.annotation.Table;
-import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
-import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
-import com.laptrinhjavaweb.util.ResultSetMapper;
+import java.util.Optional;
 
 public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 
@@ -137,7 +131,8 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 
             String sql = "SELECT * FROM " + tableName + " where 1=1";
             rs = stmt.executeQuery(sql);
-            return resultSetMapper.mapRow(rs, zClass);
+            result = resultSetMapper.mapRow(rs, zClass);
+            return result.size() > 0 ? result : null;
 
         } catch (SQLException se) {
 
@@ -188,7 +183,9 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
             stmt.setLong(1, id);
             rs = stmt.executeQuery();
             List<T> result = resultSetMapper.mapRow(rs, zClass);
-            return (result != null ? result.get(0) : null);
+//            return (result != null ? result.get(0) : null);
+
+            return Optional.ofNullable(result).map(item -> item.get(0)).orElse(null);
 
         } catch (SQLException se) {
 
