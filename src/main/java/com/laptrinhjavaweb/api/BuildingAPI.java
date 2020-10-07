@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +16,12 @@ import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.StaffDTO;
 import com.laptrinhjavaweb.service.BuildingService;
-import com.laptrinhjavaweb.service.impl.BuildingServiceImpl;
 
 @RestController
 public class BuildingAPI {
-
-	private BuildingService buildingService = new BuildingServiceImpl();
+	@Autowired
+	private BuildingService buildingService;
+//	private BuildingService buildingService = new BuildingServiceImpl();
 
 	// Create
 	@PostMapping("/buildings")
@@ -30,14 +31,14 @@ public class BuildingAPI {
 	}
 
 	@GetMapping("/building")
-	public BuildingDTO getBuilding(@RequestParam("id") String id){
+	public BuildingDTO getBuilding(@RequestParam(required = false) String id){
 		BuildingDTO result = new BuildingDTO();
 		result = buildingService.getBuildings(Long.parseLong(id));
 		return result;
 	}
 
 	@GetMapping("/buildings/delete")
-	public List<BuildingDTO> deleteBuilding(@RequestParam("id") String id) {
+	public List<BuildingDTO> deleteBuilding(@RequestParam(required = false) String id) {
 		List<BuildingDTO> result = buildingService.delete(Long.parseLong(id));
 		return result;
 	}
@@ -50,9 +51,8 @@ public class BuildingAPI {
 	}
 
 	@GetMapping("/assignemt-building")
-	public List<StaffDTO> getUser(@RequestParam("id") String id) {
-		List<StaffDTO> result = buildingService.fillAll(Long.parseLong(id));
-		return result;
+	public List<StaffDTO> getUser(@RequestParam(required = false) String id) {
+		return buildingService.fillAll(Long.parseLong(id));
 	}
 
 	@PostMapping("/assignemt-building/update")
@@ -69,7 +69,7 @@ public class BuildingAPI {
 	 */
 
 	@GetMapping("/buildings")
-	public List<BuildingDTO> getBuildings(@RequestParam Map<String, String> requestParams,
+	public List<BuildingDTO> getBuildings(@RequestParam(required = false) Map<String, String> requestParams,
 			@RequestParam("types") List<String> types) {
 		BuildingSearchBuilder builder = convertMapToBuilder(requestParams);
 		return buildingService.getBuildings(builder);

@@ -4,7 +4,9 @@ import org.modelmapper.ModelMapper;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BuildingConverter {
 	ModelMapper modelMapper = new ModelMapper();
 
