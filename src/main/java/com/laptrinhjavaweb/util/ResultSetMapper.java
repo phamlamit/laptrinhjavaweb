@@ -26,7 +26,7 @@ public class ResultSetMapper<T> {
                     for (Field field : fields) {
                         field.setAccessible(true);
                         Object objectValue = field.get(object);
-                        if (objectValue != null) {
+                        if (objectValue == null) {
                             Column column = field.getAnnotation(Column.class);
                             if (column.name().equals(columnName) && columnValue != null) {
                                 BeanUtils.setProperty(object, field.getName(), columnValue);

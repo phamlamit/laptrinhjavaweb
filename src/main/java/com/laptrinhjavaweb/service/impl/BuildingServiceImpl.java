@@ -31,18 +31,22 @@ import java.util.stream.Collectors;
 public class BuildingServiceImpl implements BuildingService {
     private BuildingRepository buildingRepository = new BuildingRepositoryImpl();
     private RentAreaRepository rentAreaRepository = new RentAreaRepositoryImpl();
-    //	private BuildingConverter buildingConverter = new BuildingConverter();
-    @Autowired
-    private BuildingConverter buildingConverter;
-
     private StaffRepository staffRepository = new StaffRepositoryImpl();
     private AssignmentBuildingRepository assignmentBuildingRepository = new AssignmentBuildingRepositoryImpl();
-    private UserConverter userConverter = new UserConverter();
-    private AssignmentBuildingConverter assignmentBuildingConverter = new AssignmentBuildingConverter();
+    @Autowired
+    private BuildingConverter buildingConverter;
+    //	private BuildingConverter buildingConverter = new BuildingConverter();
+    @Autowired
+    private UserConverter userConverter;
+    //    private UserConverter userConverter = new UserConverter();
+    @Autowired
+    private AssignmentBuildingConverter assignmentBuildingConverter;
+    //    private AssignmentBuildingConverter assignmentBuildingConverter = new AssignmentBuildingConverter();
+
 
     @Override
     public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
-        // TODO Auto-generated method stub
+
         //java 7 :
 		/*List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingSearchBuilder);
 		List<BuildingDTO> result = new ArrayList<>();

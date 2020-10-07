@@ -4,7 +4,9 @@ import org.modelmapper.ModelMapper;
 
 import com.laptrinhjavaweb.dto.StaffDTO;
 import com.laptrinhjavaweb.entity.StaffEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserConverter {
 	ModelMapper modelMapper = new ModelMapper();
 

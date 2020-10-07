@@ -4,7 +4,9 @@ import org.modelmapper.ModelMapper;
 
 import com.laptrinhjavaweb.dto.AssignmentBuildingDTO;
 import com.laptrinhjavaweb.entity.AssignmentBuildingEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AssignmentBuildingConverter {
 	ModelMapper modelMapper = new ModelMapper();
 

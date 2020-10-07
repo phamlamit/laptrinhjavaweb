@@ -107,7 +107,7 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
         }*/
 
         //Java 8
-        if(buildingSearchBuilder.getTypes() != null){
+        if(buildingSearchBuilder.getTypes() != null && buildingSearchBuilder.getTypes().length>0){
             sql.append(" and (");
             String sqlType = Arrays.stream(buildingSearchBuilder.getTypes())
                             .map(item -> " b.type like '% "+ item + "%'")
