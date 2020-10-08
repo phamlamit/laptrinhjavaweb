@@ -50,13 +50,13 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
             }
 
         } catch (SQLException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
+
 
             if (conn != null) {
                 try {
                     conn.rollback();
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
+
                     e1.printStackTrace();
                 }
             }
@@ -332,13 +332,13 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
             conn.commit();
 
         } catch (SQLException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
+
 
             if (conn != null) {
                 try {
                     conn.rollback();
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
+
                     e1.printStackTrace();
                 }
             }

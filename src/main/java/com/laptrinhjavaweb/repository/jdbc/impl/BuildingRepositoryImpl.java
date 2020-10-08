@@ -32,11 +32,11 @@ public class BuildingRepositoryImpl extends SimpleJpaRepositoryImpl<BuildingEnti
             stmt = conn.createStatement();
 
             StringBuffer sql = new StringBuffer();
-            sql.append("SELECT * FROM building b where 1=1");
+            sql.append("SELECT * FROM building b ");
             if(buildingSearchBuilder.getStaffId()!=null){
                 sql.append(" join assignmentbuilding a on b.id = a.buildingid");
             }
-
+            sql.append(" where 1=1 ");
             sql = buildSqlBuildingSearchComon(buildingSearchBuilder, sql);
             sql = buildingSqlBuildingSearchSpecial(sql, buildingSearchBuilder);
             if(buildingSearchBuilder.getStaffId()!=null){

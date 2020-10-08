@@ -10,6 +10,8 @@ public interface MasterDataUtil {
             return new DistrictMasterData();
         } else if (code.equals("buildingtype")) {
             return new BuildingTypeMasterData();
+        } else if (code.equals("transactiontype")) {
+            return new TransactionTypeMasterData();
         }
         return null;
     }
