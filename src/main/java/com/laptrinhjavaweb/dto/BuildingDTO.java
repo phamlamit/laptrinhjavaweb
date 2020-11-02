@@ -36,6 +36,18 @@ public class BuildingDTO {
 	private String createdBy;
 	private String modifiedBy;
 	private String[] rentAreas = new String[] {};
+	private Long staffID;
+	private Integer areaFrom;
+	private Integer areaTo;
+	private Double rentPriceFrom;
+	private Double rentPriceTo;
+	public Long getStaffID() {
+		return staffID;
+	}
+
+	public void setStaffID(Long staffID) {
+		this.staffID = staffID;
+	}
 
 	public Long getId() {
 		return id;
@@ -301,4 +313,35 @@ public class BuildingDTO {
 		this.rentAreas = rentAreas;
 	}
 
+	public Integer getAreaFrom() {
+		return areaFrom;
+	}
+
+	public void setAreaFrom(Integer areaFrom) {
+		this.areaFrom = areaFrom;
+	}
+
+	public Integer getAreaTo() {
+		return areaTo;
+	}
+
+	public void setAreaTo(Integer areaTo) {
+		this.areaTo = areaTo;
+	}
+
+	public Double getRentPriceFrom() {
+		return rentPriceFrom;
+	}
+
+	public void setRentPriceFrom(Double rentPriceFrom) {
+		this.rentPriceFrom = rentPriceFrom;
+	}
+
+	public Double getRentPriceTo() {
+		return rentPriceTo;
+	}
+
+	public void setRentPriceTo(Double rentPriceTo) {
+		this.rentPriceTo = rentPriceTo;
+	}
 }

@@ -21,6 +21,7 @@ import com.laptrinhjavaweb.repository.jdbc.impl.StaffRepositoryImpl;
 import com.laptrinhjavaweb.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class BuildingServiceImpl implements BuildingService {
 
 
     @Override
+
     public List<BuildingDTO> getBuildings(BuildingSearchBuilder buildingSearchBuilder) {
 
         //java 7 :
@@ -66,6 +68,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
+    @Transactional
     public BuildingDTO save(BuildingDTO buildingDTO) {
         // open transasction
 
@@ -169,6 +172,15 @@ public class BuildingServiceImpl implements BuildingService {
         BuildingEntity buildingEntity = buildingRepository.findById(id);
 //		BuildingDTO result = buildingConverter.convertToDto(buildingEntity);
         return Optional.ofNullable(buildingEntity).map(item -> buildingConverter.convertToDto(item)).orElse(null);
+    }
+
+    @Override
+    public List<BuildingDTO> getBuildings(BuildingDTO buildingDTO) {
+        List<BuildingEntity> listBuildingEntity = buildingRepository.getBuildings(buildingDTO);
+        List<BuildingDTO> result = listBuildingEntity.stream()
+                .map(item -> buildingConverter.convertToDto(item))
+                .collect(Collectors.toList());
+        return result;
     }
 
 

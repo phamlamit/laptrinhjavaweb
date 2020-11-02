@@ -26,7 +26,7 @@ public class BuildingAPI {
         return newbuilding;
     }
 
-    @GetMapping("/building")
+    @GetMapping("/buildings")
     public BuildingDTO getBuilding(@RequestParam(required = true) String id) {
         BuildingDTO result = new BuildingDTO();
         result = buildingService.getBuildings(Long.parseLong(id));
@@ -46,17 +46,18 @@ public class BuildingAPI {
         return result;
     }
 
-    @GetMapping("/assignemt-building")
+    @GetMapping("buildings/assignemt-building")
     public List<StaffDTO> getUser(@RequestParam(required = true) String id) {
         List<StaffDTO> result = buildingService.fillAll(Long.parseLong(id));
         return result;
     }
 
-    @PostMapping("/assignemt-building/update")
+    @PostMapping("buildings/assignemt-building/update")
     public List<StaffDTO> updateUserAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         List<StaffDTO> result = buildingService.updateUserAssignmentBuilding(assignmentBuildingDTO);
         return result;
     }
+
     // Search nhung chua tao buildingInput
     /*
      * @PostMapping("/get-buildings") public List<BuildingDTO>
@@ -64,6 +65,11 @@ public class BuildingAPI {
      *
      * return null; }
      */
+    @PostMapping("/buildings")
+    public List<BuildingDTO> getBuildings(@RequestBody BuildingDTO buildingDTO) {
+        List<BuildingDTO> result = buildingService.getBuildings(buildingDTO);
+        return result;
+    }
 
     @GetMapping("/buildings")
     public List<BuildingDTO> getBuildings(@RequestParam(required = true) Map<String, String> requestParams,

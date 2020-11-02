@@ -1,9 +1,9 @@
 package com.laptrinhjavaweb.converter;
 
+import com.laptrinhjavaweb.entity.BuildingEntity;
 import org.modelmapper.ModelMapper;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
-import com.laptrinhjavaweb.entity.BuildingEntity;
 import org.springframework.stereotype.Component;
 
 @Component

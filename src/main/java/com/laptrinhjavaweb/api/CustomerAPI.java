@@ -18,36 +18,10 @@ public class CustomerAPI {
     private CustomerService customerService;
 
     @GetMapping("/customers")
-    public List<CustomerDTO> getCustomer() {
+    public List<CustomerDTO> getCustomers() {
         List<CustomerDTO> result = customerService.fillALl();
         return result;
     }
-
-    @GetMapping("/customer")
-    public CustomerDTO getCustomer(@RequestParam(required = true) Long id) {
-        CustomerDTO result = customerService.fillById(id);
-        return result;
-    }
-
-    @PostMapping("/customer/save")
-    public CustomerDTO save(@RequestBody CustomerDTO customerDTO) {
-        CustomerDTO result = customerService.save(customerDTO);
-        return result;
-    }
-
-    @PostMapping("/customer/update")
-    public CustomerDTO update(@RequestBody CustomerDTO customerDTO) {
-        CustomerDTO result = customerService.update(customerDTO);
-        return result;
-    }
-
-    @GetMapping("/customer/delete")
-    public List<CustomerDTO> delete(@RequestParam(required = true) Long id) {
-        List<CustomerDTO> result = customerService.delete(id);
-        return result;
-    }
-
-    @GetMapping("/customers")
     public List<CustomerDTO> search(@RequestParam(required = true) Map<String, String> requestParams) {
         CustomerSearchBuilder builder = convertMaptoBuilder(requestParams);
         return customerService.getCustomer(builder);
@@ -77,6 +51,32 @@ public class CustomerAPI {
                 .setNameStaffIncharge(nameStaffIncharge).build();
         return builder;
     }
+
+    @GetMapping("/customer")
+    public CustomerDTO getCustomer(@RequestParam(required = true) Long id) {
+        CustomerDTO result = customerService.fillById(id);
+        return result;
+    }
+
+    @PostMapping("/customer/save")
+    public CustomerDTO save(@RequestBody CustomerDTO customerDTO) {
+        CustomerDTO result = customerService.save(customerDTO);
+        return result;
+    }
+
+    @PostMapping("/customer/update")
+    public CustomerDTO update(@RequestBody CustomerDTO customerDTO) {
+        CustomerDTO result = customerService.update(customerDTO);
+        return result;
+    }
+
+    @GetMapping("/customer/delete")
+    public List<CustomerDTO> delete(@RequestParam(required = true) Long id) {
+        List<CustomerDTO> result = customerService.delete(id);
+        return result;
+    }
+
+
 
     @GetMapping("/customer/transaction")
     public List<TransactionDTO> getTransaction(@RequestParam(required = true) Long customerId, String code){

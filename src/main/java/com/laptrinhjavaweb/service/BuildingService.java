@@ -24,4 +24,6 @@ public interface BuildingService {
     List<StaffDTO> updateUserAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
 
     BuildingDTO getBuildings(Long id);
+
+    List<BuildingDTO> getBuildings(BuildingDTO buildingDTO);
 }

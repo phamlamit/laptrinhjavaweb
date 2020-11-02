@@ -31,7 +31,7 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
         ResultSet result = null;
         try {
             conn = EntityManagerFactory.getInstance().getConnection();
-            conn.setAutoCommit(false);
+//            conn.setAutoCommit(false);
             String sql = buildSqlInsert();
 
             rs = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -42,7 +42,7 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
                 index++;
             }
             rs.executeUpdate();
-            conn.commit();
+//            conn.commit();
             result = rs.getGeneratedKeys();
 
             if (result.next()) {
@@ -51,15 +51,16 @@ public class SimpleJpaRepositoryImpl<T> implements JpaRepository<T> {
 
         } catch (SQLException | IllegalAccessException e) {
 
+            e.printStackTrace();
 
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException e1) {
-
-                    e1.printStackTrace();
-                }
-            }
+//            if (conn != null) {
+//                try {
+//                    conn.rollback();
+//                } catch (SQLException e1) {
+//
+//                    e1.printStackTrace();
+//                }
+//            }
         } finally {
 
             try {

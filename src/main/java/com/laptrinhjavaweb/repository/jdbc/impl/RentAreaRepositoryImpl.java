@@ -9,7 +9,6 @@ import java.sql.Statement;
 import com.laptrinhjavaweb.dto.RentAreaDTO;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.jdbc.RentAreaRepository;
-import com.laptrinhjavaweb.repository.jdbc.JpaRepository;
 
 public class RentAreaRepositoryImpl extends SimpleJpaRepositoryImpl<RentAreaEntity> implements RentAreaRepository {
 

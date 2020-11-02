@@ -1,33 +1,32 @@
 package com.laptrinhjavaweb.entity;
 
-import com.laptrinhjavaweb.annotation.Column;
-import com.laptrinhjavaweb.annotation.Entity;
-import com.laptrinhjavaweb.annotation.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "rentarea")
-public class RentAreaEntity {
+public class RentAreaEntity extends BaseEntity {
+    @Column(name = "value")
+    private Integer value;
 
-	@Column(name = "buildingId")
-	private Long buildingId;
+    @ManyToOne
+    @JoinColumn(name = "buildingid")
+    private BuildingEntity building;
 
-	@Column(name = "value")
-	private Integer value;
+    public Integer getValue() {
+        return value;
+    }
 
-	public Long getBuildingId() {
-		return buildingId;
-	}
+    public RentAreaEntity setValue(Integer value) {
+        this.value = value;
+        return this;
+    }
 
-	public void setBuildingId(Long buildingId) {
-		this.buildingId = buildingId;
-	}
+    public BuildingEntity getBuilding() {
+        return building;
+    }
 
-	public Integer getValue() {
-		return value;
-	}
-
-	public void setValue(Integer value) {
-		this.value = value;
-	}
-
+    public RentAreaEntity setBuilding(BuildingEntity building) {
+        this.building = building;
+        return this;
+    }
 }
