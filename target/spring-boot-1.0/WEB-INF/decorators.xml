@@ -4,6 +4,7 @@
     <excludes>
         <pattern>/access-denied</pattern>
         <pattern>/logout</pattern>
+        <pattern>/api*</pattern>
     </excludes>
 
     <decorator name="web" page="web.jsp">

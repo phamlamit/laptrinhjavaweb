@@ -8,6 +8,7 @@ public class UserDTO extends BaseDTO {
     private String userName;
     private String fullName;
     private String password;
+    private Boolean checked;
     private Integer status;
     private List<RoleDTO> roles = new ArrayList<>();
 
@@ -49,5 +50,13 @@ public class UserDTO extends BaseDTO {
 
     public void setRoles(List<RoleDTO> roles) {
         this.roles = roles;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
     }
 }

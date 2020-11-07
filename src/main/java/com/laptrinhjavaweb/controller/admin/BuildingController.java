@@ -28,15 +28,20 @@ public class BuildingController {
         mav.addObject("districts", districtService.getDistricts());
         mav.addObject("mapTypes", buildingService.getBuildingTypes());
         mav.addObject("staffMaps", userService.getStaffMaps());
-        mav.addObject("buildings",buildingService.getBuildings(buildingDTO));
-
-
+        mav.addObject("buildings", buildingService.getBuildings(buildingDTO));
         return mav;
     }
 
     @RequestMapping(value = "/admin/building-edit", method = RequestMethod.GET)
-    public ModelAndView buildingEdit() {
+    public ModelAndView buildingEdit(@ModelAttribute("model") BuildingDTO buildingDTO) {
         ModelAndView mav = new ModelAndView("admin/building/edit");
+        mav.addObject("districts", districtService.getDistricts());
+        mav.addObject("mapTypes", buildingService.getBuildingTypes());
+        if (buildingDTO.getId() != null) {
+            buildingDTO = buildingService.findById(buildingDTO.getId());
+            mav.addObject("model", buildingDTO);
+        }
         return mav;
     }
+
 }

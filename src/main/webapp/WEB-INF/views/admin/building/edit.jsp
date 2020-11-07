@@ -34,61 +34,52 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <!-- PAGE CONTENT BEGINS -->
-                            <form class="form-horizontal" role="form" id="formEdit" action="" method="POST">
+                            <form:form role="form" id="formEdit" action="" method="POST" commandName="model"
+                                       cssClass="form-horizontal">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="name">
+                                    <label class="col-sm-3 control-label no-padding-right">
                                         Tên Tòa Nhà </label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="name" name="name" placeholder="Tên Tòa Nhà"
-                                               class="col-xs-10 col-sm-5"/>
+                                        <form:input path="name" cssClass="col-sm-5"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="">
+                                    <label class="col-sm-3 control-label no-padding-right" for="numberOfBasement">
                                         Số Tầng Hầm </label>
 
                                     <div class="col-sm-9">
-                                        <input type="number" id="numberofbasement" placeholder="Số Tầng Hầm"
-                                               class="col-xs-10 col-sm-5"
-                                               class="form-control" name="numberofbasement"/>
+                                        <input type="number" id="numberOfBasement" placeholder="Số Tầng Hầm"
+                                               class="col-xs-10 col-sm-5" class="form-control" name="numberOfBasement"
+                                               value="${model.numberOfBasement}"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="">
+                                    <label class="col-sm-3 control-label no-padding-right" for="types">
                                         Loại Tòa Nhà </label>
                                     <div class="col-sm-9">
-                                        <label class="checkbox-inline"><input type="checkbox" value="TANG_TRET">Tầng
-                                            trệt</label>
-                                        <label class="checkbox-inline"><input type="checkbox" value="TANG_TRET">Nguyên
-                                            Căn</label>
-                                        <label class="checkbox-inline"><input type="checkbox" value="TANG_TRET">Nội
-                                            Thất</label>
+                                        <form:checkboxes path="types" items="${mapTypes}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="">
                                         Quận </label>
                                     <div class="col-sm-9">
-                                        <select name="cars" class="custom-select">
-                                            <option selected>----Quận-----</option>
-                                            <option value="volvo">Volvo</option>
-                                            <option value="fiat">Fiat</option>
-                                            <option value="audi">Audi</option>
-                                        </select>
+                                        <form:select path="district" id="district">
+                                            <form:option value="" label="---Chọn Quận--"/>
+                                            <form:options items="${districts}"/>
+                                        </form:select>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="">
+                                    <label class="col-sm-3 control-label no-padding-right">
                                         Huyện</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="rentarea" placeholder="Huyện"
-                                               class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                        <form:input path="district" cssClass="col-sm-5"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -102,148 +93,146 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Hướng</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="Hướng"
+                                        <input type="text" placeholder="Hướng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Hạng</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="A"
+                                        <input type="text" placeholder="A"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Diện Tích Sàn</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="nhiêu đó"
+                                        <input type="text" placeholder="nhiêu đó"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Diện Tích Thuê</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="100,200,300"
-                                               class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                        <form:input path="rentArea" cssClass="col-sm-5"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Giá Thuê</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="14"
+                                        <input type="text" placeholder="14"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Mô tả giá</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="14$"
+                                        <input type="text" placeholder="14$"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Phí dịch vụ</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="2.5$"
+                                        <input type="text" placeholder="2.5$"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Phí Ô tô</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="80$/xe/tháng"
+                                        <input type="text" placeholder="80$/xe/tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Phí mô tô</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="10$/xe/tháng"
+                                        <input type="text" placeholder="10$/xe/tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Phí Ngoài giờ</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="Free"
+                                        <input type="text" id="" placeholder="Free"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Tiền điện</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="3300đkw"
+                                        <input type="text" id="" placeholder="3300đkw"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Đặt cọc</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="3 tháng"
+                                        <input type="text" id="" placeholder="3 tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Thanh toán</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="Theo Quý"
+                                        <input type="text" id="" placeholder="Theo Quý"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                         Thời hạn thuê</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-1-1" placeholder="1-5 năm"
+                                        <input type="text" id="" placeholder="1-5 năm"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="rentarea"/>
+                                               class="form-control" name=""/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
                                     </label>
 
                                     <div class="col-md-9">
@@ -264,7 +253,7 @@
 
                                 </div>
 
-                            </form>
+                            </form:form>
                         </div>
                     </div>
                 </div>
@@ -290,7 +279,7 @@
                 <p>Some text in the modal.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Giao Tòa Nhà</button>
+                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa Nhà</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
@@ -575,18 +564,13 @@
         var buildingTypes = [];
         var formData = $('#formEdit').serializeArray();
         $.each(formData, function (index, v) {
-            // if (v.name == 'buildingTypes') {
-            //     buildingTypes.push(v.value);
-            // } else {
-            //     data["" + v.name + ""] = v.value;
-            // }
-            data["" + v.name + ""] = v.value;
+            if (v.name == 'types') {
+                buildingTypes.push(v.value);
+            } else {
+                data['' + v.name + ''] = v.value;
+            }
         });
-        // data['name'] = 'abc';
-        // data['numberOfBasement'] = 3;
-        // buildingTypes.push('TANG_TRET');
-        // buildingTypes.push('NGUYEN_CAN');
-        // data['buildingTypes'] = buildingTypes;
+         data['types'] = buildingTypes;
         $.ajax({
             type: 'POST',
             url: '${buildingAPI}',
@@ -601,6 +585,7 @@
             },
         });
     });
+
 </script>
 
 </body>

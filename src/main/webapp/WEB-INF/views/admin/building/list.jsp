@@ -1,6 +1,9 @@
 <%@include file="/common/taglib.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:url var="buildingListUrl" value="/admin/building-list"/>
+<c:url var="assignmentBuildingUrl" value="/api/building/assingment-building"/>
+<c:url var="assignmentBuildingUpdateUrl" value="/api/building/assignemt-building/update"/>
+<c:url var="buildingDeleteUrl" value="/api/buildings/delete"/>
 <html>
 <head>
     <title>Danh sach toa nha</title>
@@ -57,31 +60,24 @@
 
                                             <div class="col-sm-6">
                                                 <div>
-                                                    <label for="">Tên tòa nhà</label>
+                                                    <label for="name">Tên tòa nhà</label>
                                                     <form:input path="name" cssClass="form-control"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6">
                                                 <div>
-                                                    <label for="">Diện tích sàn</label>
+                                                    <label for="floorArea">Diện tích sàn</label>
                                                     <input type="number" id="floorArea" name="street"
                                                            value="${modelSearch.floorArea}" class="form-control">
 
                                                 </div>
                                             </div>
+                                            <br>
                                             <div class="col-sm-4">
                                                 <div class="">
-                                                    <label for="exampleFormControlSelect1">Quận hiện
-                                                        có</label>
-                                                        <%--<select class="form-control"
-                                                                id="exampleFormControlSelect1">
-                                                            <option>--Quận--</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
-                                                            <option>4</option>
-                                                            <option>5</option>
-                                                        </select>--%>
+                                                    <label for="">Quận hiện có</label>
+
                                                     <form:select path="district" id="district">
                                                         <form:option value="" label="---Chọn Quận--"/>
                                                         <form:options items="${districts}"/>
@@ -90,15 +86,15 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label for="">Phường</label>
-                                                    <input type="text" id="ward"
+                                                    <label for="ward">Phường</label>
+                                                    <input type="text" id="ward" for="ward"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label for="">Đường</label>
-                                                    <input type="text" id="street"
+                                                    <label for="street">Đường</label>
+                                                    <input type="text" id="street" for="street"
                                                            class="form-control">
                                                 </div>
                                             </div>
@@ -107,35 +103,35 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Số tàng hầm</label>
-                                                    <input type="number" id="numberOfBasement"
+                                                    <input type="number" id="numberOfBasement" for="numberOfBasement"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Hướng</label>
-                                                    <input type="text" id="direction"
+                                                    <input type="text" id="direction" for="direction"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Hạng</label>
-                                                    <input type="text" id="level"
+                                                    <input type="text" id="level" for="level"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="">Diện tích từ</label>
-                                                    <input type="number" id="rentAreaFrom"
+                                                    <input type="number" id="rentAreaFrom" form="rentAreaFrom"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="">Diện tích đến</label>
-                                                    <input type="number" id="rentAreaTo"
+                                                    <input type="number" id="rentAreaTo" for="rentareaTo"
                                                            class="form-control">
                                                 </div>
                                             </div>
@@ -157,29 +153,21 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Tên Quản Lý</label>
-                                                    <input type="text" id=""
+                                                    <input type="text" for=""
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Điện thoại quản lý</label>
-                                                    <input type="text" id=""
+                                                    <input type="text" for=""
                                                            class="form-control">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-4 mt-4">
-                                                <div >
+                                                <div>
                                                     <label for="">Chọn Nhân viên phụ trách</label>
-                                                        <%--<select class="form-control"
-                                                                id="exampleFormControlSelect1">
-                                                            <option>---Chọn Nhân Viên Phụ Trách ---</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
-                                                            <option>4</option>
-                                                            <option>5</option>
-                                                        </select>--%>
                                                     <form:select path="staffID">
                                                         <form:option value="-1" label="--Chon Nhan Vien Phu Trach"/>
                                                         <form:options items="${staffMaps}"/>
@@ -188,23 +176,7 @@
                                             </div>
 
                                             <div class="col-sm-12 form-check">
-                                                    <%--<div>
-                                                        <input class="form-check-input" type="checkbox" value=""
-                                                               id="defaultCheck1">
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            Tầng trệt
-                                                        </label>
-                                                        <input class="form-check-input" type="checkbox" value=""
-                                                               id="defaultCheck1">
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            Nguyên Căn
-                                                        </label>
-                                                        <input class="form-check-input" type="checkbox" value=""
-                                                               id="defaultCheck1">
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            Nội Thất
-                                                        </label>
-                                                    </div>--%>
+
 
                                                 <form:checkboxes path="types" items="${mapTypes}"/>
 
@@ -262,72 +234,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <%--<tr>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>
-                                    <div class="hidden-sm hidden-xs btn-group">
 
-                                        <button class="btn btn-xs btn-info " data-toggle="tooltip"
-                                                title="Giao Tòa Nhà" onclick="assignmentBuilding()">
-                                            <i class="ace-icon fa fa-reorder bigger-120"></i>
-                                        </button>
-
-                                        <button class="btn btn-xs btn-success" data-toggle="tooltip"
-                                                title="Sửa Tòa Nhà">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </button>
-
-                                        <button class="btn btn-xs btn-danger" data-toggle="tooltip"
-                                                title="Xóa Tòa Nhà">
-                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                        </button>
-                                    </div>
-
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>abc</td>
-                                <td>
-                                    <div class="hidden-sm hidden-xs btn-group">
-
-                                        <button class="btn btn-xs btn-info " data-toggle="tooltip"
-                                                onclick="assignmentBuilding()" title="Giao Tòa Nhà">
-                                            <i class="ace-icon fa fa-reorder bigger-120"></i>
-                                        </button>
-
-                                        <button class="btn btn-xs btn-success" data-toggle="tooltip"
-                                                title="Sửa Tòa Nhà">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </button>
-
-                                        <button class="btn btn-xs btn-danger" data-toggle="tooltip"
-                                                title="Xóa Tòa Nhà">
-                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                        </button>
-                                    </div>
-
-
-                                </td>
-                            </tr>--%>
                             <c:forEach var="item" items="${buildings}">
-                                <tr>
-                                    <td><input type="checkbox" value="${item.id}" id="checkbox_${item.id}" ></td>
-                                    <td>${item.street}</td>
+                                <tr value="${item.id}">
+                                    <td><input type="checkbox" value="${item.id}" id="checkbox_${item.id}"></td>
+                                    <td>${item.name}</td>
                                     <td>${item.ward}</td>
-                                    <td>${item.types}</td>
+                                    <td>${item.type}</td>
                                     <td>${item.street}</td>
                                     <td>${item.street}</td>
                                     <td>${item.street}</td>
@@ -335,17 +248,22 @@
                                     <td>
                                         <div class="hidden-sm hidden-xs btn-group">
 
-                                            <button class="btn btn-xs btn-info " data-toggle="tooltip"
-                                                    onclick="assignmentBuilding()" title="Giao Tòa Nhà">
+                                            <button class="btn btn-xs btn-info e_handle_assignment"
+                                                    data-toggle="tooltip"
+
+                                                    title="Giao Tòa Nhà">
                                                 <i class="ace-icon fa fa-reorder bigger-120"></i>
                                             </button>
-
-                                            <button class="btn btn-xs btn-success" data-toggle="tooltip"
+                                            <c:url var="updateNewURL" value="/admin/building-edit">
+                                                <c:param name="id" value="${item.id}"/>
+                                            </c:url>
+                                            <a class="btn btn-xs btn-success e_handle_update" data-toggle="tooltip"
+                                                    href="${updateNewURL}"
                                                     title="Sửa Tòa Nhà">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
+                                            </a>
 
-                                            <button class="btn btn-xs btn-danger" data-toggle="tooltip"
+                                            <button class="btn btn-xs btn-danger e_handle_delete" data-toggle="tooltip"
                                                     title="Xóa Tòa Nhà">
                                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                             </button>
@@ -378,26 +296,29 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Danh sách nhân viên</h4>
             </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
+            <div class="modal-body" id="">
+                <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Tên nhân viên</th>
+                    </tr>
+                    </thead>
+                    <tbody id="model-body"></tbody>
+                </table>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Giao Tòa Nhà</button>
+                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa
+                    Nhà
+                </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
 
     </div>
 </div>
-<script>
-    function assignmentBuilding() {
-        assignmentBuildingModal();
-    }
 
-    function assignmentBuildingModal() {
-        $('#assignmentBuildingModal').modal();
-    }
-</script>
 
 <!--[if !IE]> -->
 <script src="assets/js/jquery.2.1.1.min.js"></script>
@@ -472,6 +393,10 @@
                     chartRangeMin: $(this).data('min') || 0
                 });
         });
+
+        $(document).on('click', '.e_handle_assignment', assignmentBuilding);
+        $(document).on('click', '.e_handle_update', updateBuilding);
+        $(document).on('click', '.e_handle_delete', deleteBuilding);
 
 
         //flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
@@ -664,7 +589,106 @@
         e.preventDefault();
         $('#listForm').submit();
     });
+
+    function assignmentBuilding(e) {
+        var id = $(this).closest('tr').attr('value');
+        assignmentBuildingModal();
+        getAssignmentBuilding(id);
+    }
+
+    function assignmentBuildingModal() {
+        $('#model-body').empty();
+        $('#assignmentBuildingModal').modal();
+    }
+
+    function getAssignmentBuilding(id) {
+        $.ajax({
+            url: '${assignmentBuildingUrl}',
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            data: {
+                'id': id
+            },
+            success: function (reponse) {
+                console.log(reponse);
+                $('#btnAssignmentBuilding').attr('id', id);
+                var users = reponse;
+                users.forEach(user => {
+                    console.log("user " + user.id);
+                    if (user.checked == true) {
+                        var row = "<tr><td><input type='checkbox' checked value='" + user.id + "' id='checkbox_" + user.id + "'></td><td>" + user.fullName + "</td></tr>"
+                        $('#model-body').append(row);
+                    } else {
+                        var row = "<tr><td><input type='checkbox' value='" + user.id + "' id='checkbox_" + user.id + "'></td><td>" + user.fullName + "</td></tr>"
+                        $('#model-body').append(row);
+                    }
+
+                });
+            },
+            error: function (response) {
+                console.log("failed" + response);
+            },
+        });
+    }
+
+    $('#btnAssignmentBuilding').click(function (e) {
+        var data = [];
+        var a = $("input:checked").val();
+        for (i = 0; i < $("input:checked").length; i++) {
+            a = $("input:checked")[i];
+            data.push($(a).val());
+        }
+        var id = $(this).attr('id');
+        console.log(id);
+        console.log('sucess');
+        var assignmentBuilding = {
+            buildingId: id,
+            staffId: data,
+
+        }
+        $.ajax({
+            url: '${assignmentBuildingUpdateUrl}',
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(assignmentBuilding),
+            sucess: function (reponse) {
+                console.log("sucess") + reponse
+            },
+            error: function (reponse) {
+                console.log("error") + reponse
+            }
+        });
+    })
+
+    function deleteBuilding() {
+        var id = $(this).closest('tr').attr('value');
+        $.ajax({
+            url: '${buildingDeleteUrl}',
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            data: {
+                'id': id
+            },
+            sucess: function (reponse) {
+                console.log(reponse);
+                location.reload();
+            },
+            error: function (reponse) {
+                console.log(reponse);
+                location.reload();
+            }
+        })
+    }
+
+    function updateBuilding() {
+        var id = $(this).closest('tr').attr('value');
+        $(window).attr('location', '/admin/building-edit/' + id);
+    }
 </script>
+
 
 </body>
 </html>
