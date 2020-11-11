@@ -68,7 +68,7 @@
                                         Quận </label>
                                     <div class="col-sm-9">
                                         <form:select path="district" id="district">
-                                            <form:option value="" label="---Chọn Quận--"/>
+                                            <form:option value="" label="---Chọn Quận---"/>
                                             <form:options items="${districts}"/>
                                         </form:select>
                                     </div>
@@ -79,7 +79,7 @@
                                         Huyện</label>
 
                                     <div class="col-sm-9">
-                                        <form:input path="district" cssClass="col-sm-5"/>
+                                        <form:input path="ward" cssClass="col-sm-5"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -89,7 +89,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" id="street" placeholder="Đường"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name="street"/>
+                                               class="form-control" name="street" value="${model.street}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -99,7 +99,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="Hướng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="direction" value="${model.direction}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -109,7 +109,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="A"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="level" value="${model.level}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -119,7 +119,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="nhiêu đó"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="floorArea" value="${model.floorArea}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -137,7 +137,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="14"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="rentPrice" value="${model.rentPrice}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -147,7 +147,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="14$"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="rentPriceDescription" value="${model.rentPriceDescription}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -157,7 +157,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="2.5$"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="serviceFee" value="${model.serviceFee}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -167,7 +167,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="80$/xe/tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="carFee" value="${model.carFee}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -177,7 +177,27 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="10$/xe/tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="motoFee" value="${model.motoFee}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
+                                        Phí nước</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" placeholder="10$/tháng"
+                                               class="col-xs-10 col-sm-5"
+                                               class="form-control" name="waterFee" value="${model.waterFee}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="">
+                                        Phí môi giới</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" placeholder="10$/tháng"
+                                               class="col-xs-10 col-sm-5"
+                                               class="form-control" name="brokerageFee" value="${model.brokerageFee}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -187,7 +207,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" id="" placeholder="Free"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="overtimeFee" value="${model.overtimeFee}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -195,9 +215,9 @@
                                         Tiền điện</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="" placeholder="3300đkw"
+                                        <input type="text" id="electricityFee" placeholder="3300đkw"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="electricityFee" value="${model.electricityFee}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -205,9 +225,9 @@
                                         Đặt cọc</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="" placeholder="3 tháng"
+                                        <input type="text" id="deposit" placeholder="3 tháng"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="deposit" value="${model.deposit}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -217,7 +237,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" id="" placeholder="Theo Quý"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="payment" value="${model.payment}"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -227,7 +247,7 @@
                                     <div class="col-sm-9">
                                         <input type="text" id="" placeholder="1-5 năm"
                                                class="col-xs-10 col-sm-5"
-                                               class="form-control" name=""/>
+                                               class="form-control" name="rentTime" value="${model.rentTime}"/>
                                     </div>
                                 </div>
 
@@ -236,9 +256,17 @@
                                     </label>
 
                                     <div class="col-md-9">
-                                        <button class="btn btn-info" id="btnAddBuilding" type="button">
+                                        <button value="${model.id}" class="btn btn-info" id="btnAddBuilding"
+                                                type="button">
                                             <i class="ace-icon fa fa-check bigger-110"></i>
-                                            Thêm Tòa Nhà
+                                            <c:choose>
+                                                <c:when test="${model.id !=null}">
+                                                    Cập Nhập
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Thêm Tòa Nhà
+                                                </c:otherwise>
+                                            </c:choose>
                                         </button>
 
                                         &nbsp; &nbsp; &nbsp;
@@ -279,7 +307,9 @@
                 <p>Some text in the modal.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa Nhà</button>
+                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa
+                    Nhà
+                </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
@@ -570,7 +600,8 @@
                 data['' + v.name + ''] = v.value;
             }
         });
-         data['types'] = buildingTypes;
+        data['types'] = buildingTypes;
+        data['id'] = $('#btnAddBuilding').val();
         $.ajax({
             type: 'POST',
             url: '${buildingAPI}',

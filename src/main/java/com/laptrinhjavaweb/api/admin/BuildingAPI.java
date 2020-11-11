@@ -25,9 +25,8 @@ public class BuildingAPI {
         return result;
     }
     @PostMapping("/api/building/assignemt-building/update")
-    public List<UserDTO> updateUserAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
-        List<UserDTO> result = buildingService.updateUserAssignmentBuilding(assignmentBuildingDTO);
-        return result;
+    public void updateUserAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+        buildingService.updateUserAssignmentBuilding(assignmentBuildingDTO);
     }
     @GetMapping("api/buildings/delete")
     public void deleteBuilding(@RequestParam(("id")) String id) {

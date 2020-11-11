@@ -51,11 +51,11 @@ public class BuildingEntity extends BaseEntity {
     private Double decorationTime;
     @Column(name = "brokeragefee")
     private Double brokerageFee;
-    @Column(name = "types")
-    private String types;
-    @OneToMany(mappedBy = "building",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Column(name = "type")
+    private String type;
+    @OneToMany(mappedBy = "building", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "assignmentbuilding",
             joinColumns = @JoinColumn(name = "buildingid"),
             inverseJoinColumns = @JoinColumn(name = "staffid"))
@@ -237,14 +237,6 @@ public class BuildingEntity extends BaseEntity {
         this.brokerageFee = brokerageFee;
     }
 
-    public String getTypes() {
-        return types;
-    }
-
-    public void setTypes(String types) {
-        this.types = types;
-    }
-
     public List<RentAreaEntity> getRentAreas() {
         return rentAreas;
     }
@@ -259,5 +251,13 @@ public class BuildingEntity extends BaseEntity {
 
     public void setStaffs(List<UserEntity> staffs) {
         this.staffs = staffs;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

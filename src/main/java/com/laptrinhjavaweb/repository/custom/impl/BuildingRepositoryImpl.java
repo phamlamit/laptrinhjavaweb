@@ -24,7 +24,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT * FROM building b ");
         if (buildingDTO.getStaffID() != null && buildingDTO.getStaffID() != -1) {
-            sql.append(" join assignmentbuilding a on b.id = a.buildingid");
+            sql.append(" join assignmentbuilding a on b.id = a.buildingid ");
         }
         sql.append(" where 1=1 ");
         sql = buildSqlBuildingSearchComon(buildingDTO, sql);
@@ -39,19 +39,20 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     private StringBuffer buildingSqlBuildingSearchSpecial(StringBuffer sql, BuildingDTO buildingDTO) {
 
         if (buildingDTO.getRentPriceFrom() != null) {
-            sql.append("and" + buildingDTO.getRentPriceFrom() + "<=b.rentprice");
-        } else if (buildingDTO.getRentPriceTo() != null) {
-            sql.append("and" + buildingDTO.getRentPriceTo() + ">=b.rentprice");
+            sql.append(" and " + buildingDTO.getRentPriceFrom() + " <=b.rentprice");
         }
-        if (buildingDTO.getRentPriceFrom() != null || buildingDTO.getRentPriceTo() != null) {
-            sql.append(" and EXISTS (SELECT * FROM rentarea (r WHERE  r.buildingid = b.id");
-            if (buildingDTO.getRentPriceFrom() != null) {
-                sql.append("and r.value >= " + buildingDTO.getRentPriceFrom() + " ");
+        if (buildingDTO.getRentPriceTo() != null) {
+            sql.append(" and " + buildingDTO.getRentPriceTo() + " >=b.rentprice");
+        }
+        if (buildingDTO.getRentAreaFrom() != null || buildingDTO.getRentAreaTo() != null) {
+            sql.append(" and EXISTS (SELECT * FROM rentarea r WHERE  r.buildingid = b.id ");
+            if (buildingDTO.getRentAreaFrom() != null) {
+                sql.append(" and r.value >= " + buildingDTO.getRentAreaFrom() + " ");
             }
-            if (buildingDTO.getRentPriceTo() != null) {
-                sql.append("and r.value <= " + buildingDTO.getRentPriceTo() + " ");
+            if (buildingDTO.getRentAreaTo() != null) {
+                sql.append(" and r.value <= " + buildingDTO.getRentAreaTo() + " ");
             }
-            sql.append("))");
+            sql.append(" ) ");
         }
 
 //        java 7
@@ -70,7 +71,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         if (buildingDTO.getTypes() != null && buildingDTO.getTypes().length > 0) {
             sql.append(" and (");
             String sqlType = Arrays.stream(buildingDTO.getTypes())
-                    .map(item -> " b.type like '% " + item + "%'")
+                    .map(item -> " b.type like '%" + item + "%'")
                     .collect(Collectors.joining(" OR "));
             sql.append(sqlType);
             sql.append(" )");
@@ -89,7 +90,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                     String fieldType = field.getType().getName();
                     field.setAccessible(true);
                     if (fieldType.equals("java.lang.String")) {
-                        if (field.get(buildingDTO) != null) {
+                        if (field.get(buildingDTO) != null && !field.get(buildingDTO).equals("")) {
                             sql.append(" and b." + field.getName().toLowerCase() + " like '%"
                                     + field.get(buildingDTO).toString() + "%'");
                         }

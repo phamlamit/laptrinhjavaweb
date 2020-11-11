@@ -30,11 +30,27 @@ public class BuildingDTO extends BaseDTO {
     private String map;
     private String rentArea;
     private String[] rentAreas = new String[]{};
-    private Long staffID=-1L;
-    private Integer areaFrom;
-    private Integer areaTo;
+    private Long staffID;
+    private Integer rentAreaFrom;
+    private Integer rentAreaTo;
     private Double rentPriceFrom;
     private Double rentPriceTo;
+
+    public Integer getRentAreaFrom() {
+        return rentAreaFrom;
+    }
+
+    public void setRentAreaFrom(Integer rentAreaFrom) {
+        this.rentAreaFrom = rentAreaFrom;
+    }
+
+    public Integer getRentAreaTo() {
+        return rentAreaTo;
+    }
+
+    public void setRentAreaTo(Integer rentAreaTo) {
+        this.rentAreaTo = rentAreaTo;
+    }
 
     public String getName() {
         return name;
@@ -42,22 +58,6 @@ public class BuildingDTO extends BaseDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getAreaFrom() {
-        return areaFrom;
-    }
-
-    public void setAreaFrom(Integer areaFrom) {
-        this.areaFrom = areaFrom;
-    }
-
-    public Integer getAreaTo() {
-        return areaTo;
-    }
-
-    public void setAreaTo(Integer areaTo) {
-        this.areaTo = areaTo;
     }
 
     public Double getRentPriceFrom() {

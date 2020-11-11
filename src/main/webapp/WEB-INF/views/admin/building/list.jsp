@@ -68,7 +68,7 @@
                                             <div class="col-sm-6">
                                                 <div>
                                                     <label for="floorArea">Diện tích sàn</label>
-                                                    <input type="number" id="floorArea" name="street"
+                                                    <input type="number" id="floorArea" name="floorArea"
                                                            value="${modelSearch.floorArea}" class="form-control">
 
                                                 </div>
@@ -87,14 +87,14 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="ward">Phường</label>
-                                                    <input type="text" id="ward" for="ward"
+                                                    <input type="text" id="ward" for="ward" name="ward" value="${modelSearch.ward}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="street">Đường</label>
-                                                    <input type="text" id="street" for="street"
+                                                    <input type="text" id="street" for="street" name="street" value="${modelSearch.street}"
                                                            class="form-control">
                                                 </div>
                                             </div>
@@ -102,50 +102,50 @@
 
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label for="">Số tàng hầm</label>
-                                                    <input type="number" id="numberOfBasement" for="numberOfBasement"
+                                                    <label for="numberOfBasement">Số tàng hầm</label>
+                                                    <input type="number" id="numberOfBasement" name="numberOfBasement" value="${modelSearch.numberOfBasement}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label for="">Hướng</label>
-                                                    <input type="text" id="direction" for="direction"
+                                                    <label for="direction">Hướng</label>
+                                                    <input type="text" id="direction" name="direction" value="${modelSearch.direction}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label for="">Hạng</label>
-                                                    <input type="text" id="level" for="level"
+                                                    <label for="level">Hạng</label>
+                                                    <input type="text" id="level" name="level" value="${modelSearch.level}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
-                                                    <label for="">Diện tích từ</label>
-                                                    <input type="number" id="rentAreaFrom" form="rentAreaFrom"
+                                                    <label for="rentAreaFrom">Diện tích từ</label>
+                                                    <input type="number" id="rentAreaFrom" name="rentAreaFrom" value="${modelSearch.rentAreaFrom}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
-                                                    <label for="">Diện tích đến</label>
-                                                    <input type="number" id="rentAreaTo" for="rentareaTo"
+                                                    <label for="rentAreaTo">Diện tích đến</label>
+                                                    <input type="number" id="rentAreaTo" name="rentAreaTo" value="${modelSearch.rentAreaTo}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
-                                                    <label for="">Giá thuê từ</label>
-                                                    <input type="number" id="rentPriceFrom"
+                                                    <label for="rentPriceFrom">Giá thuê từ</label>
+                                                    <input type="number" id="rentPriceFrom" name="rentPriceFrom" value="${modelSearch.rentPriceFrom}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
-                                                    <label for="">Giá thuê đến</label>
-                                                    <input type="number" id="rentPriceTo"
+                                                    <label for="rentPriceTo">Giá thuê đến</label>
+                                                    <input type="number" id="rentPriceTo" name="rentPriceTo" value="${modelSearch.rentPriceTo}"
                                                            class="form-control">
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="">Tên Quản Lý</label>
-                                                    <input type="text" for=""
+                                                    <input type="text" name="" value=""
                                                            class="form-control">
                                                 </div>
                                             </div>

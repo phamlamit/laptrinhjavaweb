@@ -6,5 +6,6 @@ import java.util.Map;
 
 public interface IUserService {
     UserDTO findOneByUserNameAndStatus(String name, int status);
-    Map<Long,String> getStaffMaps();
+
+    Map<Long, String> getStaffMaps();
 }

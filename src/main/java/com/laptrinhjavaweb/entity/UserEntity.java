@@ -34,6 +34,9 @@ public class UserEntity extends BaseEntity {
     @ManyToMany(mappedBy = "staffs")
     private List<BuildingEntity> buildings = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "staffs")
+    private List<CustomerEntity> customers = new ArrayList<>();
+
     public String getUserName() {
         return userName;
     }
@@ -80,5 +83,21 @@ public class UserEntity extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<BuildingEntity> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(List<BuildingEntity> buildings) {
+        this.buildings = buildings;
+    }
+
+    public List<CustomerEntity> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
     }
 }

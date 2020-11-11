@@ -81,7 +81,17 @@ public class BuildingService implements IBuildingService {
         String rentArea = buildingDTO.getRentArea();
         String[] valueRentArea = rentArea.split(",");
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        buildingEntity.setTypes(String.join(",", buildingDTO.getTypes()));
+        buildingEntity.setType(String.join(",", buildingDTO.getTypes()));
+        if (buildingDTO.getId() != null) {
+            List<RentAreaEntity> rentAreaEntityList = new ArrayList<>();
+            if (buildingRepository.findOne(buildingDTO.getId()) != null) {
+                BuildingEntity oldBuildingEntity = buildingRepository.findOne(buildingDTO.getId());
+                buildingEntity.setCreatedBy(oldBuildingEntity.getCreatedBy());
+                buildingEntity.setCreatedDate(oldBuildingEntity.getCreatedDate());
+            }
+            rentAreaEntityList = rentAreaRepository.findByBuilding_Id(buildingDTO.getId());
+            rentAreaRepository.delete(rentAreaEntityList);
+        }
         List<RentAreaEntity> rentAreaEntityList = new ArrayList<>();
         for (String item : valueRentArea) {
             RentAreaEntity rentAreaEntity = new RentAreaEntity();
@@ -89,6 +99,7 @@ public class BuildingService implements IBuildingService {
             rentAreaEntity.setValue(Integer.parseInt(item));
             rentAreaEntityList.add(rentAreaEntity);
         }
+
         buildingEntity.setRentAreas(rentAreaEntityList);
         buildingEntity = buildingRepository.save(buildingEntity);
         BuildingDTO buildingDTOResult = buildingConverter.convertToDto(buildingEntity);
@@ -99,41 +110,48 @@ public class BuildingService implements IBuildingService {
     public BuildingDTO findById(Long id) {
         BuildingDTO result = buildingConverter.convertToDto(buildingRepository.findOne(id));
         //xu ly loai toa nha
+        String[] Types = result.getType().split(",");
+        result.setTypes(Types);
         // xu ly dien tich thue
+        List<RentAreaEntity> rentAreaEntityList = rentAreaRepository.findByBuilding_Id(id);
+        StringBuilder rentAreas = new StringBuilder("");
+        for (RentAreaEntity rentAreaEntity : rentAreaEntityList) {
+            rentAreas.append(rentAreaEntity.getValue() + "");
+            if (rentAreaEntity != rentAreaEntityList.get(rentAreaEntityList.size() - 1)) {
+                rentAreas.append(",");
+            }
+        }
+        result.setRentArea(rentAreas.toString());
         return result;
     }
 
     @Override
-    public List<UserDTO> updateUserAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
-        List<UserDTO> result = new ArrayList<>();
+    @Transactional
+    public void updateUserAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
+        //java 7
         BuildingEntity buildingEntity = buildingRepository.findOne(assignmentBuildingDTO.getBuildingId());
-        Long[] newUsers = assignmentBuildingDTO.getStaffId();
         List<UserEntity> newUserEntityList = new ArrayList<>();
-        for (Long userid : newUsers) {
+        for (Long userid : assignmentBuildingDTO.getStaffId()) {
             UserEntity userEntity = userRepository.findOne(userid);
             newUserEntityList.add(userEntity);
         }
         buildingEntity.setStaffs(newUserEntityList);
-        buildingEntity = buildingRepository.save(buildingEntity);
-        return null;
+        buildingRepository.save(buildingEntity);
+        //java 8
     }
 
     @Override
+    @Transactional
     public void delete(long buildingId) {
         BuildingEntity buildingEntity = buildingRepository.findOne(buildingId);
         List<RentAreaEntity> rentAreaEntityList = rentAreaRepository.findByBuilding_Id(buildingId);
-        List<UserEntity> userEntityList = userRepository.findByBuildings_Id(buildingId);
         rentAreaRepository.delete(rentAreaEntityList);
-        buildingEntity.setStaffs(userEntityList);
+        //buildingEntity.setStaffs(userEntityList);
+        //buildingEntity.getStaffs().remove(buildingEntity);
+        /*for (UserEntity item: userEntityList) {
+            item.getBuildings().remove(buildingEntity);
+        }*/
         buildingRepository.delete(buildingEntity);
-    }
-
-    private List<Long> getStaff(List<UserEntity> userEntityList) {
-        List<Long> result = new ArrayList<>();
-        for (UserEntity userEntity : userEntityList) {
-            result.add(userEntity.getId());
-        }
-        return result;
     }
 
 }
