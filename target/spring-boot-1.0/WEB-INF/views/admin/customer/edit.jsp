@@ -1,12 +1,174 @@
 <%@include file="/common/taglib.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<c:url var="customerAPI" value="/api/customer"/>
+<c:url var="saveTransactionAPI" value="/api/customer/transaction"/>
 <html>
 <head>
-    <title>Sua Toa Nha</title>
+    <title>Sua Khach Hang</title>
 </head>
 <body>
 <div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('breadcrumbs', 'fixed')
+                } catch (e) {
+                }
+            </script>
 
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Edit</li>
+            </ul><!-- /.breadcrumb -->
+
+
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="widget-box">
+                    <br>
+                    <br>
+                    <!-- PAGE CONTENT BEGINS -->
+                    <form:form role="form" id="formEdit" action="" method="POST" commandName="model"
+                               cssClass="form-horizontal">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">
+                                        Tên Đầy Đủ </label>
+
+                                    <div class="col-sm-9">
+                                        <form:input path="fullname" cssClass="col-sm-9" id="fullname"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="phone">
+                                        Số điện thoại </label>
+                                    <div class="col-sm-9">
+                                        <form:input path="phone" cssClass="col-sm-9"/>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="email">
+                                        Email </label>
+                                    <div class="col-sm-9">
+                                        <form:input path="email" cssClass="col-sm-9"/>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="number" id="customerId" hidden value="${model.id}"/>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="requirement">
+                                        Nhu Cầu </label>
+                                    <div class="col-sm-9">
+                                        <form:input path="requirement" cssClass="col-sm-9"/>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="note">
+                                        Ghi Chú </label>
+                                    <div class="col-sm-9">
+                                        <form:input path="note" cssClass="col-sm-9"/>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">
+                                    </label>
+
+                                    <div class="col-md-9">
+                                        <button value="${model.id}" class="btn btn-info" id="btnAddBuilding"
+                                                type="button">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            <c:choose>
+                                                <c:when test="${model.id !=null}">
+                                                    Cập Nhập
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Thêm Khách Hàng
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </button>&nbsp; &nbsp; &nbsp;
+                                        <button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form:form>
+                </div>
+                <br>
+                <br>
+                <div class="row mt-4">
+                    <div class="col-xs-12">
+                        <div>
+                            <c:forEach var="item" items="${mapTransactionTypes}">
+                                <table style="width:100%" id="dynamic-table" class="table table-striped table-bordered table-hover">
+                                    <caption id="${item.key}" value="${item.key}">
+                                        <h3 style="color: blue">${item.value}
+                                            <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
+                                                    data-value="${item.key}" onclick="addTransaction(this)"
+                                                    title="Thêm Giao Dịch">
+                                                <i class="fa fa-plus-circle	"></i>
+                                            </button>
+                                        </h3>
+                                    </caption>
+                                    <thead>
+                                    <tr>
+                                        <th style="width:30%">Ngày Tạo</th>
+                                        <th style="width:70%">Ghi Chú</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    <c:forEach var="mapTransaction" items="${mapTransaction}">
+                                        <tr>
+                                            <c:choose>
+                                                <c:when test="${mapTransaction.key == item.key}">
+                                                    <c:forEach var="transaction" items="${mapTransaction.value}">
+
+                                                        <td>${transaction.createdDate}</td>
+                                                        <td>${transaction.note}</td>
+
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </tr>
+                                    </c:forEach>
+                                    <tr>
+                                        <td></td>
+                                        <td><input style="width:70%" type="text" id="noteTransaction"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+
+    </div>
 </div>
 <!--[if !IE]> -->
 <script src="assets/js/jquery.2.1.1.min.js"></script>
@@ -273,20 +435,14 @@
     $('#btnAddBuilding').click(function (e) {
         e.preventDefault();
         var data = {};
-        var buildingTypes = [];
         var formData = $('#formEdit').serializeArray();
         $.each(formData, function (index, v) {
-            if (v.name == 'types') {
-                buildingTypes.push(v.value);
-            } else {
-                data['' + v.name + ''] = v.value;
-            }
+            data['' + v.name + ''] = v.value;
         });
-        data['types'] = buildingTypes;
         data['id'] = $('#btnAddBuilding').val();
         $.ajax({
             type: 'POST',
-            url: '${buildingAPI}',
+            url: '${customerAPI}',
             data: JSON.stringify(data),
             dataType: "json",
             contentType: "application/json",
@@ -298,6 +454,30 @@
             },
         });
     });
+
+    function addTransaction(e) {
+        var id = $('#customerId').val();
+        var code = $(e).closest('caption').attr('value');
+        var note = $('#noteTransaction').val();
+        var transactionDTO = {
+            customerId: id,
+            code: code,
+            note : note,
+        }
+        $.ajax({
+            type: 'POST',
+            url: '${saveTransactionAPI}',
+            data: JSON.stringify(transactionDTO),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                console.log("sucess" + response);
+            },
+            error: function (response) {
+                console.log("failed" + response);
+            },
+        });
+    }
 
 </script>
 

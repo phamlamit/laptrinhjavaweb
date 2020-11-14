@@ -17,6 +17,8 @@ public class CustomerEntity extends BaseEntity {
     private String requirement;
     @Column(name = "status")
     private Boolean status;
+    @Column(name = "note")
+    private String note;
 
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<TransactionEntity> transactions = new ArrayList<>();
@@ -82,5 +84,13 @@ public class CustomerEntity extends BaseEntity {
 
     public void setRequirement(String requirement) {
         this.requirement = requirement;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

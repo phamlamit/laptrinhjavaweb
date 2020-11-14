@@ -1,9 +1,13 @@
 <%@include file="/common/taglib.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:url var="customerListUrl" value="/admin/customer-list"/>
+<c:url var="assignmentCustomerUrl" value="/api/customer/assignment-customer"/>
+<c:url var="updateAssignmentCustomerUrl" value="/api/customer/assignment-customer"/>
+<c:url var="updateAssignmentCustomerUrl" value="/api/customer/assignment-customer"/>
+<c:url var="deleteCustomerUrl" value="/api/customer"/>
 <html>
 <head>
-    <title>Sua Toa Nha</title>
+    <title>Danh sach Khach Hang</title>
 </head>
 <body>
 <div class="main-content">
@@ -103,12 +107,14 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
-                                title="Thêm Tòa Nhà">
-                            <i class="fa fa-plus-circle	"></i>
-                        </button>
+                        <a href="/admin/customer-edit">
+                            <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
+                                    title="Thêm Khách Hàng">
+                                <i class="fa fa-plus-circle	"></i>
+                            </button>
+                        </a>
                         <button class="btn btn-white btn-danger btn-bold" data-toggle="tooltip"
-                                title="Xóa Tòa Nhà">
+                                title="Xóa Khách Hàng" id="btnDelete">
                             <i class="fa fa-trash"></i>
                         </button>
 
@@ -124,7 +130,7 @@
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th></th>
+                                <th><input type="checkbox" id="checkAll"></th>
                                 <th>Tên</th>
                                 <th>Di Động</th>
                                 <th>Email</th>
@@ -154,22 +160,17 @@
                                             <button class="btn btn-xs btn-info e_handle_assignment"
                                                     data-toggle="tooltip"
 
-                                                    title="Giao Tòa Nhà">
+                                                    title="Giao Khách Hàng">
                                                 <i class="ace-icon fa fa-reorder bigger-120"></i>
                                             </button>
-                                            <c:url var="updateNewURL" value="/admin/building-edit">
+                                            <c:url var="updateNewURL" value="/admin/customer-edit">
                                                 <c:param name="id" value="${item.id}"/>
                                             </c:url>
                                             <a class="btn btn-xs btn-success e_handle_update" data-toggle="tooltip"
-                                               href=""
-                                               title="Sửa Tòa Nhà">
+                                               href="${updateNewURL}"
+                                               title="Sửa Khách Hàng">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                             </a>
-
-                                            <button class="btn btn-xs btn-danger e_handle_delete" data-toggle="tooltip"
-                                                    title="Xóa Tòa Nhà">
-                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                            </button>
                                         </div>
 
 
@@ -190,7 +191,7 @@
 
 
 </div><!-- /.row -->
-<div id="assignmentBuildingModal" class="modal fade" role="dialog">
+<div id="assignmentCustomerModel" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -212,8 +213,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa
-                    Nhà
+                <button type="button" id="btnAssignmentCustomer" class="btn btn-success" data-dismiss="modal">Giao Khách
+                    Hàng
                 </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
             </div>
@@ -482,40 +483,101 @@
             else $(this).removeClass('dropup');
         });
 
-    })
 
-    $('#btnAddBuilding').click(function (e) {
-        e.preventDefault();
-        var data = {};
-        var buildingTypes = [];
-        var formData = $('#formEdit').serializeArray();
-        $.each(formData, function (index, v) {
-            if (v.name == 'types') {
-                buildingTypes.push(v.value);
-            } else {
-                data['' + v.name + ''] = v.value;
-            }
-        });
-        data['types'] = buildingTypes;
-        data['id'] = $('#btnAddBuilding').val();
+    });
+    $(document).on('click', '.e_handle_assignment', assignmentCustomer);
+
+    function assignmentCustomer(e) {
+        var id = $(this).closest('tr').attr('value');
+        assignmentCustomerModal();
+        getAssignmentCustomer(id);
+    }
+
+    function assignmentCustomerModal() {
+        $('#model-body').empty();
+        $('#assignmentCustomerModel').modal();
+    }
+
+    function getAssignmentCustomer(id) {
         $.ajax({
-            type: 'POST',
-            url: '${buildingAPI}',
-            data: JSON.stringify(data),
-            dataType: "json",
+            url: '${assignmentCustomerUrl}',
+            type: "GET",
+            dataType: 'json',
             contentType: "application/json",
-            success: function (response) {
-                console.log("sucess" + response);
+            data: {
+                'id': id
+            },
+            success: function (reponse) {
+                console.log(reponse);
+                $('#btnAssignmentCustomer').attr('id', id);
+                var users = reponse;
+                users.forEach(user => {
+                    console.log("user " + user.id);
+                    if (user.checked == true) {
+                        var row = "<tr><td><input type='checkbox' checked value='" + user.id + "' id='checkbox_" + user.id + "'></td><td>" + user.fullName + "</td></tr>"
+                        $('#model-body').append(row);
+                    } else {
+                        var row = "<tr><td><input type='checkbox' value='" + user.id + "' id='checkbox_" + user.id + "'></td><td>" + user.fullName + "</td></tr>"
+                        $('#model-body').append(row);
+                    }
+
+                });
             },
             error: function (response) {
                 console.log("failed" + response);
             },
         });
-    });
-    $('#btnSearch').click(function (e) {
+    }
+
+    $('#btnAssignmentCustomer').click(function (e) {
+        var data = [];
+        var a = $("input:checked").val();
+        for (i = 0; i < $("input:checked").length; i++) {
+            a = $("input:checked")[i];
+            data.push($(a).val());
+        }
+        var id = $(this).attr('id');
+        console.log(id);
+        console.log('sucess');
+        var assignmentCustomer = {
+            customerId: id,
+            staffId: data,
+
+        }
+        $.ajax({
+            url: '${updateAssignmentCustomerUrl}',
+            type: "PUT",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(assignmentCustomer),
+            sucess: function (reponse) {
+                console.log("sucess") + reponse
+                location.reload();
+            },
+            error: function (reponse) {
+                console.log("error") + reponse
+            }
+        });
+    })
+    $('#btnDelete').on('click', function (e) {
         e.preventDefault();
-        $('#listForm').submit();
-    });
+        var ids = $('tbody input[type=checkbox]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        $.ajax({
+            url: '${deleteCustomerUrl}',
+            type: 'DELETE',
+            contentType: 'application/json',
+            data: JSON.stringify(ids),
+            success: function (result) {
+                location.reload();
+            },
+            error: function (error) {
+                location.reload();
+            }
+        });
+
+    })
 
 </script>
 

@@ -201,10 +201,10 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
+                        <a href="/admin/building-edit"><button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
                                 title="Thêm Tòa Nhà">
                             <i class="fa fa-plus-circle	"></i>
-                        </button>
+                        </button></a>
                         <button class="btn btn-white btn-danger btn-bold" data-toggle="tooltip"
                                 title="Xóa Tòa Nhà">
                             <i class="fa fa-trash"></i>

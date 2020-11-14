@@ -6,6 +6,7 @@ public class CustomerDTO extends BaseDTO {
     private String email;
     private Long staffID;
     private String requirement;
+    private String note;
     private boolean status;
 
     public String getFullname() {
@@ -54,5 +55,13 @@ public class CustomerDTO extends BaseDTO {
 
     public void setStaffID(Long staffID) {
         this.staffID = staffID;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

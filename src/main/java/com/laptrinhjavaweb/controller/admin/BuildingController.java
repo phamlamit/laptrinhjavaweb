@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.controller.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.IDistrictService;
+import com.laptrinhjavaweb.service.ITransactionTypeService;
 import com.laptrinhjavaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

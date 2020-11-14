@@ -294,37 +294,6 @@
 
 
 </div><!-- /.row -->
-<div id="assignmentBuildingModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Danh sách nhân viên</h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnAssignmentBuilding" class="btn btn-success" data-dismiss="modal">Giao Tòa
-                    Nhà
-                </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-<script>
-    function assignmentBuilding() {
-        assignmentBuildingModal();
-    }
-
-    function assignmentBuildingModal() {
-        $('#assignmentBuildingModal').modal();
-    }
-</script>
 
 <!--[if !IE]> -->
 <script src="assets/js/jquery.2.1.1.min.js"></script>
