@@ -35,6 +35,7 @@ public class BuildingDTO extends BaseDTO {
     private Integer rentAreaTo;
     private Double rentPriceFrom;
     private Double rentPriceTo;
+    private String Address;
 
     public Integer getRentAreaFrom() {
         return rentAreaFrom;
@@ -310,4 +311,11 @@ public class BuildingDTO extends BaseDTO {
         this.rentAreas = rentAreas;
     }
 
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
 }

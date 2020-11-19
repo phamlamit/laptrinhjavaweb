@@ -115,55 +115,66 @@
                 </div>
                 <br>
                 <br>
-                <div class="row mt-4">
-                    <div class="col-xs-12">
-                        <div>
-                            <c:forEach var="item" items="${mapTransactionTypes}">
-                                <table style="width:100%" id="dynamic-table" class="table table-striped table-bordered table-hover">
-                                    <caption id="${item.key}" value="${item.key}">
-                                        <h3 style="color: blue">${item.value}
-                                            <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
-                                                    data-value="${item.key}" onclick="addTransaction(this)"
-                                                    title="Thêm Giao Dịch">
-                                                <i class="fa fa-plus-circle	"></i>
-                                            </button>
-                                        </h3>
-                                    </caption>
-                                    <thead>
-                                    <tr>
-                                        <th style="width:30%">Ngày Tạo</th>
-                                        <th style="width:70%">Ghi Chú</th>
+                <c:choose>
+                    <c:when test="${model.id !=null}">
+                        <div class="row mt-4">
+                            <div class="col-xs-12">
+                                <div>
+                                    <c:forEach var="item" items="${mapTransactionTypes}">
+                                        <table style="width:100%" id="dynamic-table"
+                                               class="table table-striped table-bordered table-hover">
+                                            <caption id="${item.key}" value="${item.key}">
+                                                <h3 style="color: blue">${item.value}
+                                                    <button class="btn btn-white btn-info btn-bold"
+                                                            data-toggle="tooltip"
+                                                            data-value="${item.key}" onclick="addTransaction(this)"
+                                                            title="Thêm Giao Dịch">
+                                                        <i class="fa fa-plus-circle	"></i>
+                                                    </button>
+                                                </h3>
+                                            </caption>
+                                            <thead>
+                                            <tr>
+                                                <th style="width:30%">Ngày Tạo</th>
+                                                <th style="width:70%">Ghi Chú</th>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-                                    <c:forEach var="mapTransaction" items="${mapTransaction}">
-                                        <tr>
-                                            <c:choose>
-                                                <c:when test="${mapTransaction.key == item.key}">
-                                                    <c:forEach var="transaction" items="${mapTransaction.value}">
+                                            </tr>
+                                            </thead>
+                                            <tbody id="tbody">
+                                            <c:forEach var="mapTransaction" items="${mapTransaction}">
 
-                                                        <td>${transaction.createdDate}</td>
-                                                        <td>${transaction.note}</td>
+                                                <c:choose>
+                                                    <c:when test="${mapTransaction.key == item.key}">
+                                                        <c:forEach var="transaction" items="${mapTransaction.value}">
+                                                            <tr>
+                                                                <td>${transaction.createdDate}</td>
+                                                                <td>${transaction.note}</td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    </c:otherwise>
+                                                </c:choose>
 
-                                                    </c:forEach>
-                                                </c:when>
-                                                <c:otherwise>
-                                                </c:otherwise>
-                                            </c:choose>
 
-                                        </tr>
+                                            </c:forEach>
+                                            <tr>
+                                                <td></td>
+                                                <td><input style="width:70%" type="text"
+                                                           id="noteTransaction_${item.key}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </c:forEach>
-                                    <tr>
-                                        <td></td>
-                                        <td><input style="width:70%" type="text" id="noteTransaction"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </c:forEach>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </c:when>
+                    <c:otherwise>
+
+                    </c:otherwise>
+                </c:choose>
+
             </div>
         </div>
         <!-- /.col -->
@@ -448,9 +459,11 @@
             contentType: "application/json",
             success: function (response) {
                 console.log("sucess" + response);
+                location.reload();
             },
             error: function (response) {
                 console.log("failed" + response);
+                location.reload();
             },
         });
     });
@@ -458,11 +471,11 @@
     function addTransaction(e) {
         var id = $('#customerId').val();
         var code = $(e).closest('caption').attr('value');
-        var note = $('#noteTransaction').val();
+        var note = $('#noteTransaction_' + code).val();
         var transactionDTO = {
             customerId: id,
             code: code,
-            note : note,
+            note: note,
         }
         $.ajax({
             type: 'POST',
@@ -472,13 +485,14 @@
             contentType: "application/json",
             success: function (response) {
                 console.log("sucess" + response);
+                location.reload();
             },
             error: function (response) {
                 console.log("failed" + response);
+                location.reload();
             },
         });
     }
-
 </script>
 
 </body>

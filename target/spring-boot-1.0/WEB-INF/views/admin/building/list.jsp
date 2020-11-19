@@ -87,14 +87,16 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="ward">Phường</label>
-                                                    <input type="text" id="ward" for="ward" name="ward" value="${modelSearch.ward}"
+                                                    <input type="text" id="ward" for="ward" name="ward"
+                                                           value="${modelSearch.ward}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="street">Đường</label>
-                                                    <input type="text" id="street" for="street" name="street" value="${modelSearch.street}"
+                                                    <input type="text" id="street" for="street" name="street"
+                                                           value="${modelSearch.street}"
                                                            class="form-control">
                                                 </div>
                                             </div>
@@ -103,69 +105,62 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="numberOfBasement">Số tàng hầm</label>
-                                                    <input type="number" id="numberOfBasement" name="numberOfBasement" value="${modelSearch.numberOfBasement}"
+                                                    <input type="number" id="numberOfBasement" name="numberOfBasement"
+                                                           value="${modelSearch.numberOfBasement}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="direction">Hướng</label>
-                                                    <input type="text" id="direction" name="direction" value="${modelSearch.direction}"
+                                                    <input type="text" id="direction" name="direction"
+                                                           value="${modelSearch.direction}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label for="level">Hạng</label>
-                                                    <input type="text" id="level" name="level" value="${modelSearch.level}"
+                                                    <input type="text" id="level" name="level"
+                                                           value="${modelSearch.level}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="rentAreaFrom">Diện tích từ</label>
-                                                    <input type="number" id="rentAreaFrom" name="rentAreaFrom" value="${modelSearch.rentAreaFrom}"
+                                                    <input type="number" id="rentAreaFrom" name="rentAreaFrom"
+                                                           value="${modelSearch.rentAreaFrom}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="rentAreaTo">Diện tích đến</label>
-                                                    <input type="number" id="rentAreaTo" name="rentAreaTo" value="${modelSearch.rentAreaTo}"
+                                                    <input type="number" id="rentAreaTo" name="rentAreaTo"
+                                                           value="${modelSearch.rentAreaTo}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="rentPriceFrom">Giá thuê từ</label>
-                                                    <input type="number" id="rentPriceFrom" name="rentPriceFrom" value="${modelSearch.rentPriceFrom}"
+                                                    <input type="number" id="rentPriceFrom" name="rentPriceFrom"
+                                                           value="${modelSearch.rentPriceFrom}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div>
                                                     <label for="rentPriceTo">Giá thuê đến</label>
-                                                    <input type="number" id="rentPriceTo" name="rentPriceTo" value="${modelSearch.rentPriceTo}"
+                                                    <input type="number" id="rentPriceTo" name="rentPriceTo"
+                                                           value="${modelSearch.rentPriceTo}"
                                                            class="form-control">
                                                 </div>
                                             </div>
                                             <br>
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <label for="">Tên Quản Lý</label>
-                                                    <input type="text" name="" value=""
-                                                           class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <label for="">Điện thoại quản lý</label>
-                                                    <input type="text" for=""
-                                                           class="form-control">
-                                                </div>
-                                            </div>
 
-                                            <div class="col-sm-4 mt-4">
+                                            <div class="col-sm-6 mt-4">
                                                 <div>
                                                     <label for="">Chọn Nhân viên phụ trách</label>
                                                     <form:select path="staffID">
@@ -175,7 +170,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-12 form-check">
+                                            <div class="col-sm-6 form-check">
 
 
                                                 <form:checkboxes path="types" items="${mapTypes}"/>
@@ -201,14 +196,16 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <a href="/admin/building-edit"><button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
-                                title="Thêm Tòa Nhà">
-                            <i class="fa fa-plus-circle	"></i>
-                        </button></a>
-                        <button class="btn btn-white btn-danger btn-bold" data-toggle="tooltip"
-                                title="Xóa Tòa Nhà">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                        <a href="/admin/building-edit">
+                            <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
+                                    title="Thêm Tòa Nhà">
+                                <i class="fa fa-plus-circle	"></i>
+                            </button>
+                        </a>
+<%--                        <button class="btn btn-white btn-danger btn-bold" data-toggle="tooltip"--%>
+<%--                                title="Xóa Tòa Nhà">--%>
+<%--                            <i class="fa fa-trash"></i>--%>
+<%--                        </button>--%>
 
                     </div>
                 </div>
@@ -222,10 +219,9 @@
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>Tên sản phẩm</th>
                                 <th>Địa chỉ</th>
-                                <th>Tên Quản Lý</th>
-                                <th>Số điện thoại</th>
                                 <th>Diện tích sàn</th>
                                 <th>Giá thuê</th>
                                 <th>Phí dịch vụ</th>
@@ -239,11 +235,10 @@
                                 <tr value="${item.id}">
                                     <td><input type="checkbox" value="${item.id}" id="checkbox_${item.id}"></td>
                                     <td>${item.name}</td>
-                                    <td>${item.ward}</td>
-                                    <td>${item.type}</td>
-                                    <td>${item.street}</td>
-                                    <td>${item.street}</td>
-                                    <td>${item.street}</td>
+                                    <td>${item.address}</td>
+                                    <td>${item.floorArea}</td>
+                                    <td>${item.rentPrice}</td>
+                                    <td>${item.serviceFee}</td>
 
                                     <td>
                                         <div class="hidden-sm hidden-xs btn-group">
@@ -258,8 +253,8 @@
                                                 <c:param name="id" value="${item.id}"/>
                                             </c:url>
                                             <a class="btn btn-xs btn-success e_handle_update" data-toggle="tooltip"
-                                                    href="${updateNewURL}"
-                                                    title="Sửa Tòa Nhà">
+                                               href="${updateNewURL}"
+                                               title="Sửa Tòa Nhà">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                             </a>
 

@@ -8,7 +8,6 @@ import com.laptrinhjavaweb.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +38,15 @@ public class CustomerAPI {
     public void deleteCustomer(@RequestBody long[] ids) {
         customerService.delete(ids);
     }
+
     @GetMapping("api/customer/transaction")
-    public List<TransactionDTO> getTransaction(@RequestParam Long buildingId, String code){
+    public List<TransactionDTO> getTransaction(@RequestParam Long buildingId, String code) {
         List<TransactionDTO> result = customerService.getTransactions(buildingId, code);
         return result;
     }
+
     @PostMapping("api/customer/transaction")
-    public void saveTransaction(@RequestBody TransactionDTO transactionDTO){
+    public void saveTransaction(@RequestBody TransactionDTO transactionDTO) {
         customerService.saveTransaction(transactionDTO);
     }
 }

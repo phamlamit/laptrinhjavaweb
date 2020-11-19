@@ -152,7 +152,14 @@
                                     <td>${item.requirement}</td>
                                     <td>${item.createdBy}</td>
                                     <td>${item.createdDate}</td>
-                                    <td>${item.status}</td>
+                                    <td><c:choose>
+                                        <c:when test="${item.status ==true}">
+                                            Đã giao dịch xong
+                                        </c:when>
+                                        <c:otherwise>
+                                            Đang giao dịch
+                                        </c:otherwise>
+                                    </c:choose></td>
 
                                     <td>
                                         <div class="hidden-sm hidden-xs btn-group">
