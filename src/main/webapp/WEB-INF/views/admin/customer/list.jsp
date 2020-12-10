@@ -23,7 +23,7 @@
             <ul class="breadcrumb">
                 <li>
                     <i class="ace-icon fa fa-home home-icon"></i>
-                    <a href="#">Home</a>
+                    <a href="">Home</a>
                 </li>
                 <li class="active">Dashboard</li>
             </ul><!-- /.breadcrumb -->
@@ -107,7 +107,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <a href="/admin/customer-edit">
+                        <a href="<c:url value='/admin/customer-edit'/>">
                             <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
                                     title="Thêm Khách Hàng">
                                 <i class="fa fa-plus-circle	"></i>
@@ -566,6 +566,10 @@
             }
         });
     })
+    $('#btnSearch').click(function (e) {
+        e.preventDefault();
+        $('#listForm').submit();
+    });
     $('#btnDelete').on('click', function (e) {
         e.preventDefault();
         var ids = $('tbody input[type=checkbox]:checked').map(function () {

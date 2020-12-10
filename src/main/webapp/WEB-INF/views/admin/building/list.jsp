@@ -196,7 +196,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <a href="/admin/building-edit">
+                        <a href="<c:url value='/admin/building-edit'/>">
                             <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip"
                                     title="Thêm Tòa Nhà">
                                 <i class="fa fa-plus-circle	"></i>
